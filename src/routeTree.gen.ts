@@ -10,33 +10,63 @@
 
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as CaracteresRouteImport } from './routes/caracteres'
+import { Route as GramaticaRouteImport } from './routes/gramatica'
+import { Route as JuegosRouteImport } from './routes/juegos'
 
 const IndexRoute = IndexRouteImport.update({
   id: '/',
   path: '/',
   getParentRoute: () => rootRouteImport,
 } as any)
+const CaracteresRoute = CaracteresRouteImport.update({
+  id: '/caracteres',
+  path: '/caracteres',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const GramaticaRoute = GramaticaRouteImport.update({
+  id: '/gramatica',
+  path: '/gramatica',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const JuegosRoute = JuegosRouteImport.update({
+  id: '/juegos',
+  path: '/juegos',
+  getParentRoute: () => rootRouteImport,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
+  '/caracteres': typeof CaracteresRoute
+  '/gramatica': typeof GramaticaRoute
+  '/juegos': typeof JuegosRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
+  '/caracteres': typeof CaracteresRoute
+  '/gramatica': typeof GramaticaRoute
+  '/juegos': typeof JuegosRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
+  '/caracteres': typeof CaracteresRoute
+  '/gramatica': typeof GramaticaRoute
+  '/juegos': typeof JuegosRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/'
+  fullPaths: '/' | '/caracteres' | '/gramatica' | '/juegos'
   fileRoutesByTo: FileRoutesByTo
-  to: '/'
-  id: '__root__' | '/'
+  to: '/' | '/caracteres' | '/gramatica' | '/juegos'
+  id: '__root__' | '/' | '/caracteres' | '/gramatica' | '/juegos'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
+  CaracteresRoute: typeof CaracteresRoute
+  GramaticaRoute: typeof GramaticaRoute
+  JuegosRoute: typeof JuegosRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -48,11 +78,35 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof IndexRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/caracteres': {
+      id: '/caracteres'
+      path: '/caracteres'
+      fullPath: '/caracteres'
+      preLoaderRoute: typeof CaracteresRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/gramatica': {
+      id: '/gramatica'
+      path: '/gramatica'
+      fullPath: '/gramatica'
+      preLoaderRoute: typeof GramaticaRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/juegos': {
+      id: '/juegos'
+      path: '/juegos'
+      fullPath: '/juegos'
+      preLoaderRoute: typeof JuegosRouteImport
+      parentRoute: typeof rootRouteImport
+    }
   }
 }
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
+  CaracteresRoute: CaracteresRoute,
+  GramaticaRoute: GramaticaRoute,
+  JuegosRoute: JuegosRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
