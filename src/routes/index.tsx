@@ -2,7 +2,7 @@ import { createFileRoute, Link } from "@tanstack/react-router";
 import { ArrowLeftRight, ArrowRight, BookOpen, ChevronRight, Grid2X2, Puzzle, Search, Volume2 } from "lucide-react";
 import { useState, type FormEvent } from "react";
 import { Button } from "@/components/ui/button";
-import { entries, searchEntries, type Entry } from "@/lib/dictionary";
+import { entries, featuredEntry, searchEntries, type Entry } from "@/lib/dictionary";
 import manuscript from "@/assets/benkyou-manuscript.jpg";
 
 export const Route = createFileRoute("/")({
@@ -23,7 +23,7 @@ function Index() {
   const [direction, setDirection] = useState<Direction>("ja-es");
   const [query, setQuery] = useState("");
   const [searched, setSearched] = useState(false);
-  const [selected, setSelected] = useState<Entry>(entries[0]);
+  const [selected, setSelected] = useState<Entry>(featuredEntry);
   const [speaking, setSpeaking] = useState(false);
   const results = searched ? searchEntries(query) : [];
 

@@ -24,8 +24,13 @@ export const entries: Entry[] = [
   { id: "arigatou", japanese: "ありがとう", kana: "ありがとう", romaji: "arigatō", ca: "gràcies", es: "gracias", type: "Expresión", level: "N5", strokes: "Hiragana", example: "ありがとう、助かりました。", exampleCa: "Gràcies, m’has ajudat molt.", exampleEs: "Gracias, me has ayudado mucho." },
 ];
 
+export const featuredEntry: Entry = entries[0] ?? { id: "sakura", japanese: "桜", kana: "さくら", romaji: "sakura", ca: "flor de cirerer", es: "flor de cerezo", type: "Sustantivo", level: "N2", strokes: "10 trazos", example: "春に桜が咲きます。", exampleCa: "A la primavera floreixen els cirerers.", exampleEs: "En primavera florecen los cerezos." };
+
 export function searchEntries(query: string) {
   const term = query.trim().toLocaleLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "");
   if (!term) return [];
-  return entries.filter((entry) => [entry.japanese, entry.kana, entry.romaji, entry.ca, entry.es].some((part) => part.toLocaleLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "").includes(term)));
+  return entries.filter((entry) => [entry.japanese, entry.kana, entry.romaji, entry.ca, entry.es].some((part) => {
+    const normalized = part.toLocaleLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "");
+    return normalized === term || normalized.split(/[\s;,·]+/).some((word) => word.startsWith(term));
+  }));
 }
