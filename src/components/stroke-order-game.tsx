@@ -33,13 +33,14 @@ export function StrokeOrderGame() {
   const [feedback, setFeedback] = useState("");
   const kanji = strokeKanji[kanjiIndex];
   if (!kanji) return null;
-  const complete = progress === kanji.strokes.length;
+  const strokeCount = kanji.strokes.length;
+  const complete = progress === strokeCount;
 
   function selectStroke(index: number) {
     if (complete || index < progress) return;
     if (index === progress) {
       setProgress(index + 1);
-      setFeedback(index + 1 === kanji.strokes.length ? "¡Kanji completado!" : "¡Correcto! Continúa con el siguiente trazo.");
+      setFeedback(index + 1 === strokeCount ? "¡Kanji completado!" : "¡Correcto! Continúa con el siguiente trazo.");
     } else {
       setMistakes((count) => count + 1);
       setFeedback("Todavía no. Fíjate en la forma y prueba otra carta.");
@@ -57,7 +58,7 @@ export function StrokeOrderGame() {
   }
 
   function restart() {
-    setOrder(shuffled(kanji.strokes.length));
+    setOrder(shuffled(strokeCount));
     setProgress(0);
     setMistakes(0);
     setFeedback("");
