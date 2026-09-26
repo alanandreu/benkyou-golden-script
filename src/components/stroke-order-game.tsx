@@ -87,7 +87,7 @@ export function StrokeOrderGame() {
           <div className="min-w-0">
             <p className="eyebrow">Selecciona el siguiente trazo</p>
             <div className="mt-4 grid grid-cols-2 gap-2 sm:grid-cols-3 sm:gap-3">
-              {order.map((index) => <Button key={index} variant="ghost" onClick={() => selectStroke(index)} disabled={index < progress || complete} aria-label={`Carta de trazo ${order.indexOf(index) + 1}${index < progress ? ", colocada" : ""}`} className={`aspect-square h-auto w-full rounded-sm border p-2 transition-colors disabled:opacity-50 ${index < progress ? "border-gold bg-gold-pale" : "border-border bg-background hover:border-gold hover:bg-secondary"}`}>
+              {order.map((index) => <Button key={index} variant="ghost" onClick={() => selectStroke(index)} disabled={index < progress || complete} aria-label={`Carta de trazo ${order.indexOf(index) + 1}${index < progress ? ", colocada" : ""}`} className={`aspect-square h-auto w-full rounded-sm border p-2 transition-colors [&_svg]:!size-full disabled:opacity-50 ${index < progress ? "border-gold bg-gold-pale" : "border-border bg-background hover:border-gold hover:bg-secondary"}`}>
                 <StrokePicture kanji={kanji} active={index} className="h-full w-full max-w-[120px]" />
               </Button>)}
             </div>
