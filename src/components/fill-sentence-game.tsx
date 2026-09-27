@@ -28,7 +28,7 @@ const questions: Record<Level, Question[]> = {
     { before: "環境問題に", after: "を持つ。", answer: "関心", options: ["関心", "感心", "歓心", "寒心"], es: "Interesarse por los problemas ambientales." },
   ],
   N1: [
-    { before: "責任者の", after: "を問う。", answer: "責任", options: ["責任", "責務", "負担", "義理"], es: "Exigir responsabilidades al encargado." },
+    { before: "計画は", after: "に進んでいる。", answer: "順調", options: ["順調", "順番", "同調", "純情"], es: "El plan avanza sin problemas." },
     { before: "真理を", after: "する学問。", answer: "追究", options: ["追究", "追及", "追求", "探求"], es: "Una disciplina que investiga la verdad." },
     { before: "両国の関係は", after: "の状態にある。", answer: "膠着", options: ["膠着", "執着", "到着", "密着"], es: "La relación entre ambos países está estancada." },
   ],
