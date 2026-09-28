@@ -63,14 +63,14 @@ export function FillSentenceGame() {
         <h2 id="fill-game-title" className="mt-3 font-display text-4xl text-primary">Completa la frase</h2>
         <p className="mt-3 text-sm leading-7 text-muted-foreground">Elige la palabra que falta. Atención a los homófonos y kanji parecidos.</p>
         <div className="mt-6 flex flex-wrap gap-2" aria-label="Nivel JLPT">
-          {levels.map((l) => <Button key={l} size="sm" variant={l === level ? "default" : "porcelain"} aria-pressed={l === level} onClick={() => reset(l)}>{l}</Button>)}
+          {levelOptions.map((l) => <Button key={l} size="sm" variant={l === level ? "default" : "porcelain"} aria-pressed={l === level} onClick={() => reset(l)}>{l}</Button>)}
         </div>
         <div className="mt-7 flex items-center justify-between border-y border-border py-4 text-sm"><span>Frase</span><span className="font-semibold text-primary">{index + 1} / {list.length}</span></div>
         <div className="flex items-center justify-between border-b border-border py-4 text-sm"><span>Aciertos</span><span className="font-semibold text-primary">{score}</span></div>
         <Button onClick={() => reset()} variant="porcelain" className="mt-7"><RotateCcw /> Reiniciar</Button>
       </div>
       <div className="border border-border bg-card p-5 sm:p-8">
-        <p className="eyebrow">Nivel {level}</p>
+        <p className="eyebrow">{level === "Todos" ? "Todos los niveles" : `Nivel ${level}`}</p>
         <p className="mt-5 font-japanese text-2xl leading-relaxed text-foreground sm:text-3xl">
           {q.before}<span className={`mx-1 inline-block min-w-20 border-b-2 px-2 text-center ${done ? (picked === q.answer ? "border-gold text-primary" : "border-destructive text-primary") : "border-gold text-transparent"}`}>{done ? q.answer : "＿"}</span>{q.after}
         </p>
