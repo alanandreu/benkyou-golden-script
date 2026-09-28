@@ -1,5 +1,5 @@
 import { Link } from "@tanstack/react-router";
-import { BookOpen, Grid2X2, Menu, Puzzle, Search, X } from "lucide-react";
+import { BookOpen, Grid2X2, Map, Menu, Puzzle, Search, X } from "lucide-react";
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
 
@@ -8,6 +8,7 @@ const links = [
   { to: "/gramatica" as const, label: "Gramática", icon: BookOpen },
   { to: "/caracteres" as const, label: "Kanji · Kana", icon: Grid2X2 },
   { to: "/juegos" as const, label: "Minijuegos", icon: Puzzle },
+  { to: "/geografia" as const, label: "Geografía", icon: Map },
 ];
 
 export function SiteHeader() {
