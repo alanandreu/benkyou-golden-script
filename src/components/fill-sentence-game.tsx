@@ -34,13 +34,16 @@ const questions: Record<Level, Question[]> = {
   ],
 };
 const levels: Level[] = ["N5", "N4", "N3", "N2", "N1"];
+type LevelFilter = Level | "Todos";
+const levelOptions: LevelFilter[] = ["Todos", ...levels];
+const allQuestions = levels.flatMap((l) => questions[l]);
 
 export function FillSentenceGame() {
-  const [level, setLevel] = useState<Level>("N5");
+  const [level, setLevel] = useState<LevelFilter>("N5");
   const [index, setIndex] = useState(0);
   const [picked, setPicked] = useState<string | null>(null);
   const [score, setScore] = useState(0);
-  const list = questions[level];
+  const list = level === "Todos" ? allQuestions : questions[level];
   const q = list[index];
   if (!q) return null;
   const done = picked !== null;
@@ -50,7 +53,7 @@ export function FillSentenceGame() {
     setPicked(option);
     if (option === q!.answer) setScore((s) => s + 1);
   }
-  function reset(next: Level = level) { setLevel(next); setIndex(0); setPicked(null); setScore(0); }
+  function reset(next: LevelFilter = level) { setLevel(next); setIndex(0); setPicked(null); setScore(0); }
   function next() { setIndex((i) => (i + 1) % list.length); setPicked(null); }
 
   return <section className="mt-20 border-t border-border pt-12" aria-labelledby="fill-game-title">
