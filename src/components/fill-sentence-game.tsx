@@ -34,13 +34,16 @@ const questions: Record<Level, Question[]> = {
   ],
 };
 const levels: Level[] = ["N5", "N4", "N3", "N2", "N1"];
+type LevelFilter = Level | "Todos";
+const levelOptions: LevelFilter[] = ["Todos", ...levels];
+const allQuestions = levels.flatMap((l) => questions[l]);
 
 export function FillSentenceGame() {
-  const [level, setLevel] = useState<Level>("N5");
+  const [level, setLevel] = useState<LevelFilter>("N5");
   const [index, setIndex] = useState(0);
   const [picked, setPicked] = useState<string | null>(null);
   const [score, setScore] = useState(0);
-  const list = questions[level];
+  const list = level === "Todos" ? allQuestions : questions[level];
   const q = list[index];
   if (!q) return null;
   const done = picked !== null;
@@ -50,7 +53,7 @@ export function FillSentenceGame() {
     setPicked(option);
     if (option === q!.answer) setScore((s) => s + 1);
   }
-  function reset(next: Level = level) { setLevel(next); setIndex(0); setPicked(null); setScore(0); }
+  function reset(next: LevelFilter = level) { setLevel(next); setIndex(0); setPicked(null); setScore(0); }
   function next() { setIndex((i) => (i + 1) % list.length); setPicked(null); }
 
   return <section className="mt-20 border-t border-border pt-12" aria-labelledby="fill-game-title">
@@ -60,14 +63,14 @@ export function FillSentenceGame() {
         <h2 id="fill-game-title" className="mt-3 font-display text-4xl text-primary">Completa la frase</h2>
         <p className="mt-3 text-sm leading-7 text-muted-foreground">Elige la palabra que falta. Atención a los homófonos y kanji parecidos.</p>
         <div className="mt-6 flex flex-wrap gap-2" aria-label="Nivel JLPT">
-          {levels.map((l) => <Button key={l} size="sm" variant={l === level ? "default" : "porcelain"} aria-pressed={l === level} onClick={() => reset(l)}>{l}</Button>)}
+          {levelOptions.map((l) => <Button key={l} size="sm" variant={l === level ? "default" : "porcelain"} aria-pressed={l === level} onClick={() => reset(l)}>{l}</Button>)}
         </div>
         <div className="mt-7 flex items-center justify-between border-y border-border py-4 text-sm"><span>Frase</span><span className="font-semibold text-primary">{index + 1} / {list.length}</span></div>
         <div className="flex items-center justify-between border-b border-border py-4 text-sm"><span>Aciertos</span><span className="font-semibold text-primary">{score}</span></div>
         <Button onClick={() => reset()} variant="porcelain" className="mt-7"><RotateCcw /> Reiniciar</Button>
       </div>
       <div className="border border-border bg-card p-5 sm:p-8">
-        <p className="eyebrow">Nivel {level}</p>
+        <p className="eyebrow">{level === "Todos" ? "Todos los niveles" : `Nivel ${level}`}</p>
         <p className="mt-5 font-japanese text-2xl leading-relaxed text-foreground sm:text-3xl">
           {q.before}<span className={`mx-1 inline-block min-w-20 border-b-2 px-2 text-center ${done ? (picked === q.answer ? "border-gold text-primary" : "border-destructive text-primary") : "border-gold text-transparent"}`}>{done ? q.answer : "＿"}</span>{q.after}
         </p>
