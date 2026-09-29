@@ -36,7 +36,8 @@ export function JapanMap() {
   const [hoveredPrefecture, setHoveredPrefecture] = useState<number | null>(null);
 
   const regionById = useMemo(() => new Map(regions.map((r) => [r.id, r])), []);
-  const activeRegion = regionById.get(selectedRegion ?? hoveredRegion ?? "") ?? null;
+  const activeRegionId = selectedRegion ?? hoveredRegion;
+  const activeRegion = activeRegionId ? regionById.get(activeRegionId) ?? null : null;
   const activePrefecture = selectedPrefecture ?? (hoveredPrefecture != null ? prefectures.find((p) => p.id === hoveredPrefecture) ?? null : null);
 
   return (
