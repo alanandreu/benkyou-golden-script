@@ -11,3 +11,4 @@
 
 - Keep the BENKYOU interface as separate dictionary, grammar, character, and games routes with shared navigation; each learning area remains directly addressable.
 - Keep the initial dictionary entries as a small transparent local demonstration dataset until a persistent lexical source is connected; do not imply comprehensive coverage.
+- Keep merged regional outlines separate from prefecture paths for the geography map, because region mode must not reveal prefecture boundaries or names.
