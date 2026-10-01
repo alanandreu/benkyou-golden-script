@@ -5,6 +5,10 @@ import { Button } from "@/components/ui/button";
 
 type Mode = "regiones" | "prefecturas";
 
+// Okinawa, Ryūkyū y Senkaku se recortan del mapa principal y se muestran ampliados en un recuadro.
+const INSET_SOURCE = "M-250,968 H-9 V1023 H130 V1190 H-250 Z";
+const INSET_SCALE = 0.66;
+
 // Territorios cuya soberanía está en disputa: se señalan aparte, sin integrarlos en regiones ni prefecturas.
 interface Territory { id: string; ja: string; es: string; ca: string; x: number; y: number; r: number; note: string }
 const TERRITORIES: Territory[] = [
@@ -49,6 +53,65 @@ export function JapanMap() {
   const activeRegion = activeRegionId ? regionById.get(activeRegionId) ?? null : null;
   const activePrefecture = selectedPrefecture ?? (hoveredPrefecture != null ? prefectures.find((p) => p.id === hoveredPrefecture) ?? null : null);
 
+  const renderLayer = (inset: boolean) => (
+    <>
+            {mode === "regiones" ? regions.map((r) => (
+              <path
+                key={`${inset}-${r.id}`}
+                d={regionPaths[r.id]}
+                fill={REGION_COLORS[r.id]}
+                stroke="var(--background)"
+                strokeWidth={(activeRegion?.id === r.id ? 2.4 : 1) / (inset ? INSET_SCALE : 1)}
+                fillRule="evenodd"
+                className="cursor-pointer transition-opacity duration-150 focus:outline-none focus-visible:stroke-primary"
+                opacity={activeRegion == null || activeRegion.id === r.id ? 1 : 0.55}
+                role="button"
+                tabIndex={0}
+                aria-label={`${r.ja} · ${r.es}`}
+                onMouseEnter={() => setHoveredRegion(r.id)}
+                onMouseLeave={() => setHoveredRegion(null)}
+                onFocus={() => setHoveredRegion(r.id)}
+                onBlur={() => setHoveredRegion(null)}
+                onClick={() => { setTerritory(null); setSelectedRegion(r.id); }}
+                onKeyDown={(event) => { if (event.key === "Enter" || event.key === " ") { event.preventDefault(); setSelectedRegion(r.id); } }}
+              />
+            )) : prefectures.map((p) => (
+              <path
+                key={`${inset}-${p.id}`}
+                d={p.path}
+                fill={PREFECTURE_TONES[(p.id - 1) % PREFECTURE_TONES.length]}
+                stroke="var(--background)"
+                strokeWidth={(activePrefecture?.id === p.id ? 2.4 : 1) / (inset ? INSET_SCALE : 1)}
+                className="cursor-pointer transition-opacity duration-150 focus:outline-none focus-visible:stroke-primary"
+                opacity={activePrefecture == null || activePrefecture.id === p.id ? 1 : 0.55}
+                role="button"
+                tabIndex={0}
+                aria-label={`${p.ja} · ${p.es}`}
+                onMouseEnter={() => setHoveredPrefecture(p.id)}
+                onMouseLeave={() => setHoveredPrefecture(null)}
+                onFocus={() => setHoveredPrefecture(p.id)}
+                onBlur={() => setHoveredPrefecture(null)}
+                onClick={() => { setTerritory(null); setSelectedPrefecture(p); }}
+                onKeyDown={(event) => { if (event.key === "Enter" || event.key === " ") { event.preventDefault(); setSelectedPrefecture(p); } }}
+              />
+            ))}
+            {TERRITORIES.map((t) => (
+              <g
+                key={`${inset}-${t.id}`}
+                role="button"
+                tabIndex={0}
+                aria-label={`${t.ja} · ${t.es} (territorio en disputa)`}
+                className="cursor-pointer focus:outline-none"
+                onClick={() => setTerritory(t)}
+                onKeyDown={(event) => { if (event.key === "Enter" || event.key === " ") { event.preventDefault(); setTerritory(t); } }}
+              >
+                <circle cx={t.x} cy={t.y} r={t.r} fill="var(--gold)" fillOpacity={territory?.id === t.id ? 0.35 : 0.15} stroke="var(--gold)" strokeWidth={2} strokeDasharray="5 4" />
+                <circle cx={t.x} cy={t.y} r={3.5} fill="var(--primary)" />
+              </g>
+            ))}
+    </>
+  );
+
   return (
     <div className="grid gap-8 lg:grid-cols-[1fr_340px]">
       <div>
@@ -67,61 +130,20 @@ export function JapanMap() {
           ))}
         </div>
         <div className="entry-panel relative overflow-hidden p-4 md:p-6">
-          <svg viewBox="-270 0 1140 1200" className="mx-auto w-full max-w-xl" role="img" aria-label={mode === "regiones" ? "Mapa de las ocho regiones de Japón" : "Mapa de las 47 prefecturas de Japón"}>
-            {mode === "regiones" ? regions.map((r) => (
-              <path
-                key={r.id}
-                d={regionPaths[r.id]}
-                fill={REGION_COLORS[r.id]}
-                stroke="var(--background)"
-                strokeWidth={activeRegion?.id === r.id ? 2.4 : 1}
-                fillRule="evenodd"
-                className="cursor-pointer transition-opacity duration-150 focus:outline-none focus-visible:stroke-primary"
-                opacity={activeRegion == null || activeRegion.id === r.id ? 1 : 0.55}
-                role="button"
-                tabIndex={0}
-                aria-label={`${r.ja} · ${r.es}`}
-                onMouseEnter={() => setHoveredRegion(r.id)}
-                onMouseLeave={() => setHoveredRegion(null)}
-                onFocus={() => setHoveredRegion(r.id)}
-                onBlur={() => setHoveredRegion(null)}
-                onClick={() => { setTerritory(null); setSelectedRegion(r.id); }}
-                onKeyDown={(event) => { if (event.key === "Enter" || event.key === " ") { event.preventDefault(); setSelectedRegion(r.id); } }}
-              />
-            )) : prefectures.map((p) => (
-              <path
-                key={p.id}
-                d={p.path}
-                fill={PREFECTURE_TONES[(p.id - 1) % PREFECTURE_TONES.length]}
-                stroke="var(--background)"
-                strokeWidth={activePrefecture?.id === p.id ? 2.4 : 1}
-                className="cursor-pointer transition-opacity duration-150 focus:outline-none focus-visible:stroke-primary"
-                opacity={activePrefecture == null || activePrefecture.id === p.id ? 1 : 0.55}
-                role="button"
-                tabIndex={0}
-                aria-label={`${p.ja} · ${p.es}`}
-                onMouseEnter={() => setHoveredPrefecture(p.id)}
-                onMouseLeave={() => setHoveredPrefecture(null)}
-                onFocus={() => setHoveredPrefecture(p.id)}
-                onBlur={() => setHoveredPrefecture(null)}
-                onClick={() => { setTerritory(null); setSelectedPrefecture(p); }}
-                onKeyDown={(event) => { if (event.key === "Enter" || event.key === " ") { event.preventDefault(); setSelectedPrefecture(p); } }}
-              />
-            ))}
-            {TERRITORIES.map((t) => (
-              <g
-                key={t.id}
-                role="button"
-                tabIndex={0}
-                aria-label={`${t.ja} · ${t.es} (territorio en disputa)`}
-                className="cursor-pointer focus:outline-none"
-                onClick={() => setTerritory(t)}
-                onKeyDown={(event) => { if (event.key === "Enter" || event.key === " ") { event.preventDefault(); setTerritory(t); } }}
-              >
-                <circle cx={t.x} cy={t.y} r={t.r} fill="var(--gold)" fillOpacity={territory?.id === t.id ? 0.35 : 0.15} stroke="var(--gold)" strokeWidth={2} strokeDasharray="5 4" />
-                <circle cx={t.x} cy={t.y} r={3.5} fill="var(--primary)" />
+          <svg viewBox="0 0 870 1160" className="mx-auto w-full max-w-xl" role="img" aria-label={mode === "regiones" ? "Mapa de las ocho regiones de Japón" : "Mapa de las 47 prefecturas de Japón"}>
+            <defs>
+              <clipPath id="jp-main-clip"><path clipRule="evenodd" d={`M-400,-100 H1300 V1400 H-400 Z ${INSET_SOURCE}`} /></clipPath>
+              <clipPath id="jp-inset-clip"><path d={INSET_SOURCE} /></clipPath>
+            </defs>
+            <g clipPath="url(#jp-main-clip)">{renderLayer(false)}</g>
+            <g aria-label="Recuadro: Okinawa, islas Ryūkyū y Senkaku">
+              <rect x={592} y={986} width={272} height={168} rx={6} fill="var(--card)" stroke="var(--gold)" strokeWidth={1.2} />
+              <rect x={597} y={991} width={262} height={158} rx={4} fill="none" stroke="var(--gold)" strokeOpacity={0.4} strokeWidth={0.6} />
+              <text x={604} y={1006} fill="var(--primary)" fontSize={11} letterSpacing={2} className="font-japanese">沖縄・琉球諸島</text>
+              <g transform={`translate(604 1012) scale(${INSET_SCALE}) translate(250 -968)`}>
+                <g clipPath="url(#jp-inset-clip)">{renderLayer(true)}</g>
               </g>
-            ))}
+            </g>
           </svg>
         </div>
       </div>
