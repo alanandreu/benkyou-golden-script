@@ -5,6 +5,14 @@ import { Button } from "@/components/ui/button";
 
 type Mode = "regiones" | "prefecturas";
 
+// Territorios cuya soberanía está en disputa: se señalan aparte, sin integrarlos en regiones ni prefecturas.
+interface Territory { id: string; ja: string; es: string; ca: string; x: number; y: number; r: number; note: string }
+const TERRITORIES: Territory[] = [
+  { id: "kuriles", ja: "北方領土", es: "Islas Kuriles del Sur", ca: "Illes Kurils del Sud", x: 775, y: 95, r: 34, note: "Administradas por Rusia; Japón las reclama como parte de Hokkaidō." },
+  { id: "liancourt", ja: "竹島", es: "Rocas de Liancourt", ca: "Roques de Liancourt", x: 124, y: 499, r: 12, note: "Administradas por Corea del Sur (Dokdo); Japón las reclama como parte de Shimane." },
+  { id: "senkaku", ja: "尖閣諸島", es: "Islas Senkaku", ca: "Illes Senkaku", x: -238, y: 1080, r: 14, note: "Administradas por Japón (Okinawa); China y Taiwán las reclaman (Diaoyu / Tiaoyutai)." },
+];
+
 // Paleta aúlica: granates, dorados y beiges en armonía con la identidad BENKYOU.
 const REGION_COLORS: Record<RegionId, string> = {
   hokkaido: "oklch(0.52 0.09 20)",
@@ -34,6 +42,7 @@ export function JapanMap() {
   const [hoveredRegion, setHoveredRegion] = useState<RegionId | null>(null);
   const [selectedPrefecture, setSelectedPrefecture] = useState<Prefecture | null>(null);
   const [hoveredPrefecture, setHoveredPrefecture] = useState<number | null>(null);
+  const [territory, setTerritory] = useState<Territory | null>(null);
 
   const regionById = useMemo(() => new Map(regions.map((r) => [r.id, r])), []);
   const activeRegionId = selectedRegion ?? hoveredRegion;
@@ -50,7 +59,7 @@ export function JapanMap() {
               role="tab"
               aria-selected={mode === m}
               variant="ghost"
-              onClick={() => { setMode(m); setSelectedRegion(null); setHoveredRegion(null); setSelectedPrefecture(null); setHoveredPrefecture(null); }}
+              onClick={() => { setMode(m); setSelectedRegion(null); setHoveredRegion(null); setSelectedPrefecture(null); setHoveredPrefecture(null); setTerritory(null); }}
               className={`rounded-full px-5 py-2 text-[11px] font-semibold uppercase tracking-[0.18em] transition-colors ${mode === m ? "bg-primary text-primary-foreground shadow-sm hover:bg-primary/90 hover:text-primary-foreground" : "text-muted-foreground hover:text-primary"}`}
             >
               {m === "regiones" ? "Regiones" : "Prefecturas"}
@@ -58,7 +67,7 @@ export function JapanMap() {
           ))}
         </div>
         <div className="entry-panel relative overflow-hidden p-4 md:p-6">
-          <svg viewBox="0 0 870 1160" className="mx-auto w-full max-w-xl" role="img" aria-label={mode === "regiones" ? "Mapa de las ocho regiones de Japón" : "Mapa de las 47 prefecturas de Japón"}>
+          <svg viewBox="-270 0 1140 1200" className="mx-auto w-full max-w-xl" role="img" aria-label={mode === "regiones" ? "Mapa de las ocho regiones de Japón" : "Mapa de las 47 prefecturas de Japón"}>
             {mode === "regiones" ? regions.map((r) => (
               <path
                 key={r.id}
@@ -76,7 +85,7 @@ export function JapanMap() {
                 onMouseLeave={() => setHoveredRegion(null)}
                 onFocus={() => setHoveredRegion(r.id)}
                 onBlur={() => setHoveredRegion(null)}
-                onClick={() => setSelectedRegion(r.id)}
+                onClick={() => { setTerritory(null); setSelectedRegion(r.id); }}
                 onKeyDown={(event) => { if (event.key === "Enter" || event.key === " ") { event.preventDefault(); setSelectedRegion(r.id); } }}
               />
             )) : prefectures.map((p) => (
@@ -95,9 +104,23 @@ export function JapanMap() {
                 onMouseLeave={() => setHoveredPrefecture(null)}
                 onFocus={() => setHoveredPrefecture(p.id)}
                 onBlur={() => setHoveredPrefecture(null)}
-                onClick={() => setSelectedPrefecture(p)}
+                onClick={() => { setTerritory(null); setSelectedPrefecture(p); }}
                 onKeyDown={(event) => { if (event.key === "Enter" || event.key === " ") { event.preventDefault(); setSelectedPrefecture(p); } }}
               />
+            ))}
+            {TERRITORIES.map((t) => (
+              <g
+                key={t.id}
+                role="button"
+                tabIndex={0}
+                aria-label={`${t.ja} · ${t.es} (territorio en disputa)`}
+                className="cursor-pointer focus:outline-none"
+                onClick={() => setTerritory(t)}
+                onKeyDown={(event) => { if (event.key === "Enter" || event.key === " ") { event.preventDefault(); setTerritory(t); } }}
+              >
+                <circle cx={t.x} cy={t.y} r={t.r} fill="var(--gold)" fillOpacity={territory?.id === t.id ? 0.35 : 0.15} stroke="var(--gold)" strokeWidth={2} strokeDasharray="5 4" />
+                <circle cx={t.x} cy={t.y} r={3.5} fill="var(--primary)" />
+              </g>
             ))}
           </svg>
         </div>
@@ -105,7 +128,15 @@ export function JapanMap() {
 
       <aside className="space-y-6">
         <div className="entry-panel p-6">
-          {mode === "regiones" && activeRegion ? (
+          {territory ? (
+            <div className="animate-rise">
+              <p className="eyebrow">Territorio en disputa</p>
+              <p className="mt-3 font-japanese text-4xl text-primary">{territory.ja}</p>
+              <p className="mt-1 font-display text-2xl font-semibold text-foreground">{territory.es}</p>
+              <p className="mt-2 text-sm text-muted-foreground">Catalán: {territory.ca}</p>
+              <p className="mt-4 border-t border-border pt-4 text-sm leading-relaxed text-muted-foreground">{territory.note}</p>
+            </div>
+          ) : mode === "regiones" && activeRegion ? (
             <div className="animate-rise">
               <p className="eyebrow">Región seleccionada</p>
               <p className="mt-3 font-japanese text-4xl text-primary">{activeRegion.ja}</p>
@@ -133,6 +164,22 @@ export function JapanMap() {
               </p>
             </div>
           )}
+        </div>
+
+        <div className="entry-panel p-6">
+          <p className="eyebrow">Territorios en disputa</p>
+          <ul className="mt-4 space-y-2.5">
+            {TERRITORIES.map((t) => (
+              <li key={t.id}>
+                <button type="button" onClick={() => setTerritory(t)} className="flex w-full items-center gap-3 text-left text-sm hover:text-primary">
+                  <span className="size-3.5 shrink-0 rounded-full border border-dashed border-gold bg-gold/20" aria-hidden="true" />
+                  <span className="font-japanese text-base text-primary">{t.ja}</span>
+                  <span className="text-foreground">{t.es}</span>
+                </button>
+              </li>
+            ))}
+          </ul>
+          <p className="mt-4 text-xs leading-relaxed text-muted-foreground">Se señalan con círculo dorado discontinuo. Su soberanía es objeto de disputa internacional.</p>
         </div>
 
         {mode === "regiones" && <div className="entry-panel p-6">
