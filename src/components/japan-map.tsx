@@ -6,8 +6,8 @@ import { Button } from "@/components/ui/button";
 type Mode = "regiones" | "prefecturas";
 
 // Okinawa, Ryūkyū y Senkaku se recortan del mapa principal y se muestran ampliados en un recuadro.
-const INSET_SOURCE = "M-250,968 H-9 V1023 H130 V1190 H-250 Z";
-const INSET_SCALE = 0.66;
+const INSET_SOURCE = "M-246,934 H72 V1190 H-246 Z";
+const INSET_SCALE = 0.8;
 
 // Territorios cuya soberanía está en disputa: se señalan aparte, sin integrarlos en regiones ni prefecturas.
 interface Territory { id: string; ja: string; es: string; ca: string; x: number; y: number; r: number; note: string }
@@ -55,6 +55,18 @@ export function JapanMap() {
 
   const renderLayer = (inset: boolean) => (
     <>
+      {inset && mode === "regiones" && prefectures.filter((p) => p.region === "kyushu").map((p) => (
+        <path
+          key={`inset-ky-${p.id}`}
+          d={p.path}
+          fill={REGION_COLORS.kyushu}
+          opacity={activeRegion == null || activeRegion.id === "kyushu" ? 1 : 0.55}
+          className="cursor-pointer transition-opacity duration-150"
+          onMouseEnter={() => setHoveredRegion("kyushu")}
+          onMouseLeave={() => setHoveredRegion(null)}
+          onClick={() => { setTerritory(null); setSelectedRegion("kyushu"); }}
+        />
+      ))}
             {mode === "regiones" ? regions.map((r) => (
               <path
                 key={`${inset}-${r.id}`}
@@ -137,10 +149,10 @@ export function JapanMap() {
             </defs>
             <g clipPath="url(#jp-main-clip)">{renderLayer(false)}</g>
             <g aria-label="Recuadro: Okinawa, islas Ryūkyū y Senkaku">
-              <rect x={592} y={986} width={272} height={168} rx={6} fill="var(--card)" stroke="var(--gold)" strokeWidth={1.2} />
-              <rect x={597} y={991} width={262} height={158} rx={4} fill="none" stroke="var(--gold)" strokeOpacity={0.4} strokeWidth={0.6} />
-              <text x={604} y={1006} fill="var(--primary)" fontSize={11} letterSpacing={2} className="font-japanese">沖縄・琉球諸島</text>
-              <g transform={`translate(604 1012) scale(${INSET_SCALE}) translate(250 -968)`}>
+              <rect x={596} y={928} width={268} height={228} rx={6} fill="var(--card)" stroke="var(--gold)" strokeWidth={1.2} />
+              <rect x={601} y={933} width={258} height={218} rx={4} fill="none" stroke="var(--gold)" strokeOpacity={0.4} strokeWidth={0.6} />
+              <text x={610} y={950} fill="var(--primary)" fontSize={11} letterSpacing={2} className="font-japanese">沖縄・琉球諸島</text>
+              <g transform={`translate(608 952) scale(${INSET_SCALE}) translate(246 -934)`}>
                 <g clipPath="url(#jp-inset-clip)">{renderLayer(true)}</g>
               </g>
             </g>
