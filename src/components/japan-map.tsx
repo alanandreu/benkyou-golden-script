@@ -5,7 +5,7 @@ import { Button } from "@/components/ui/button";
 
 type Mode = "regiones" | "prefecturas";
 
-// Okinawa, Ryūkyū y Senkaku se recortan del mapa principal y se muestran ampliados en un recuadro.
+// Okinawa, Ryūkyū y Senkaku se recortan del mapa principal y se muestran ampliadas en el espacio libre, señaladas como islas alejadas.
 const INSET_SOURCE = "M-240,936 H70 V1182 H-240 Z";
 const INSET_SCALE = 0.82;
 
@@ -148,11 +148,12 @@ export function JapanMap() {
               <clipPath id="jp-inset-clip"><path d={INSET_SOURCE} /></clipPath>
             </defs>
             <g clipPath="url(#jp-main-clip)">{renderLayer(false)}</g>
-            <g aria-label="Recuadro: Okinawa, islas Ryūkyū y Senkaku">
-              <rect x={596} y={922} width={268} height={238} rx={6} fill="var(--card)" stroke="var(--gold)" strokeWidth={1.2} />
-              <rect x={601} y={927} width={258} height={228} rx={4} fill="none" stroke="var(--gold)" strokeOpacity={0.4} strokeWidth={0.6} />
-              <text x={610} y={944} fill="var(--primary)" fontSize={11} letterSpacing={2} className="font-japanese">沖縄・琉球諸島</text>
-              <g transform={`translate(605 956) scale(${INSET_SCALE}) translate(240 -936)`}>
+            <g aria-label="Islas alejadas: Okinawa, islas Ryūkyū y Senkaku, ampliadas para mayor visibilidad">
+              <line x1={486} y1={876} x2={620} y2={946} stroke="var(--gold)" strokeWidth={1} strokeDasharray="2 6" strokeLinecap="round" opacity={0.8} />
+              <rect x={590} y={918} width={280} height={246} rx={26} fill="var(--secondary)" fillOpacity={0.35} stroke="var(--gold)" strokeOpacity={0.65} strokeWidth={1} strokeDasharray="7 6" />
+              <text x={614} y={942} fill="var(--primary)" fontSize={11} letterSpacing={2} className="font-japanese">沖縄・琉球諸島</text>
+              <text x={614} y={956} fill="var(--muted-foreground)" fontSize={8.5} letterSpacing={0.5}>Islas alejadas · ampliadas para mayor visibilidad</text>
+              <g transform={`translate(605 962) scale(${INSET_SCALE}) translate(240 -936)`}>
                 <g clipPath="url(#jp-inset-clip)">{renderLayer(true)}</g>
               </g>
             </g>
