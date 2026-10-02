@@ -6,7 +6,7 @@ import { Button } from "@/components/ui/button";
 type Mode = "regiones" | "prefecturas";
 
 // Okinawa, Ryūkyū y Senkaku se recortan del mapa principal y se muestran ampliadas en el espacio libre, señaladas como islas alejadas.
-const INSET_SOURCE = "M-240,936 H70 V1182 H-240 Z";
+const INSET_SOURCE = "M-268,936 H70 V1182 H-268 Z";
 const INSET_SCALE = 1.05;
 
 // Territorios cuya soberanía está en disputa: se señalan aparte, sin integrarlos en regiones ni prefecturas.
@@ -149,11 +149,11 @@ export function JapanMap() {
             </defs>
             <g clipPath="url(#jp-main-clip)">{renderLayer(false)}</g>
             <g aria-label="Islas alejadas: Okinawa, islas Ryūkyū y Senkaku, ampliadas para mayor visibilidad">
-              <line x1={362} y1={890} x2={428} y2={906} stroke="var(--gold)" strokeWidth={1} strokeDasharray="2 6" strokeLinecap="round" opacity={0.8} />
-              <rect x={4} y={874} width={356} height={284} rx={28} fill="var(--secondary)" fillOpacity={0.3} stroke="var(--gold)" strokeOpacity={0.6} strokeWidth={1} strokeDasharray="7 6" />
+              <line x1={402} y1={890} x2={448} y2={906} stroke="var(--gold)" strokeWidth={1} strokeDasharray="2 6" strokeLinecap="round" opacity={0.8} />
+              <rect x={4} y={874} width={404} height={284} rx={28} fill="var(--secondary)" fillOpacity={0.3} stroke="var(--gold)" strokeOpacity={0.6} strokeWidth={1} strokeDasharray="7 6" />
               <text x={30} y={904} fill="var(--primary)" fontSize={12} letterSpacing={2} className="font-japanese">沖縄・琉球諸島</text>
               <text x={30} y={919} fill="var(--muted-foreground)" fontSize={9} letterSpacing={0.5}>Islas alejadas · ampliadas para mayor visibilidad</text>
-              <g transform={`translate(16 892) scale(${INSET_SCALE}) translate(240 -936)`}>
+              <g transform={`translate(30 892) scale(${INSET_SCALE}) translate(268 -936)`}>
                 <g clipPath="url(#jp-inset-clip)">{renderLayer(true)}</g>
               </g>
             </g>
