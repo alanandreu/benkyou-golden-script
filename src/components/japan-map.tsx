@@ -7,7 +7,7 @@ type Mode = "regiones" | "prefecturas";
 
 // Okinawa, Ryūkyū y Senkaku se recortan del mapa principal y se muestran ampliadas en el espacio libre, señaladas como islas alejadas.
 const INSET_SOURCE = "M-240,936 H70 V1182 H-240 Z";
-const INSET_SCALE = 0.82;
+const INSET_SCALE = 1.15;
 
 // Territorios cuya soberanía está en disputa: se señalan aparte, sin integrarlos en regiones ni prefecturas.
 interface Territory { id: string; ja: string; es: string; ca: string; x: number; y: number; r: number; note: string }
@@ -149,11 +149,11 @@ export function JapanMap() {
             </defs>
             <g clipPath="url(#jp-main-clip)">{renderLayer(false)}</g>
             <g aria-label="Islas alejadas: Okinawa, islas Ryūkyū y Senkaku, ampliadas para mayor visibilidad">
-              <line x1={486} y1={876} x2={620} y2={946} stroke="var(--gold)" strokeWidth={1} strokeDasharray="2 6" strokeLinecap="round" opacity={0.8} />
-              <rect x={590} y={918} width={280} height={246} rx={26} fill="var(--secondary)" fillOpacity={0.35} stroke="var(--gold)" strokeOpacity={0.65} strokeWidth={1} strokeDasharray="7 6" />
-              <text x={614} y={942} fill="var(--primary)" fontSize={11} letterSpacing={2} className="font-japanese">沖縄・琉球諸島</text>
-              <text x={614} y={956} fill="var(--muted-foreground)" fontSize={8.5} letterSpacing={0.5}>Islas alejadas · ampliadas para mayor visibilidad</text>
-              <g transform={`translate(605 962) scale(${INSET_SCALE}) translate(240 -936)`}>
+              <line x1={404} y1={884} x2={452} y2={906} stroke="var(--gold)" strokeWidth={1} strokeDasharray="2 6" strokeLinecap="round" opacity={0.8} />
+              <rect x={14} y={852} width={396} height={222} rx={28} fill="var(--secondary)" fillOpacity={0.3} stroke="var(--gold)" strokeOpacity={0.6} strokeWidth={1} strokeDasharray="7 6" />
+              <text x={38} y={882} fill="var(--primary)" fontSize={12} letterSpacing={2} className="font-japanese">沖縄・琉球諸島</text>
+              <text x={38} y={897} fill="var(--muted-foreground)" fontSize={9} letterSpacing={0.5}>Islas alejadas · ampliadas para mayor visibilidad</text>
+              <g transform={`translate(30 872) scale(${INSET_SCALE}) translate(240 -936)`}>
                 <g clipPath="url(#jp-inset-clip)">{renderLayer(true)}</g>
               </g>
             </g>
