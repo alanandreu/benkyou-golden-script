@@ -200,6 +200,20 @@ export function JapanMap() {
           )}
         </div>
 
+        {mode === "regiones" && <div className="entry-panel p-6">
+          <p className="eyebrow">Las ocho regiones</p>
+          <ul className="mt-4 space-y-2.5">
+            {regions.map((r) => (
+              <li key={r.id} className="flex items-center gap-3 text-sm">
+                <span className="size-3.5 shrink-0 rounded-sm border border-border" style={{ background: REGION_COLORS[r.id] }} aria-hidden="true" />
+                <span className="font-japanese text-base text-primary">{r.ja}</span>
+                <span className="text-foreground">{r.es}</span>
+                <span className="ml-auto min-w-0 text-right text-xs text-muted-foreground">{r.ca}</span>
+              </li>
+            ))}
+          </ul>
+        </div>}
+
         <div className="entry-panel p-6">
           <p className="eyebrow">Territorios en disputa</p>
           <ul className="mt-4 space-y-2.5">
@@ -215,20 +229,6 @@ export function JapanMap() {
           </ul>
           <p className="mt-4 text-xs leading-relaxed text-muted-foreground">Se señalan con círculo dorado discontinuo. Su soberanía es objeto de disputa internacional.</p>
         </div>
-
-        {mode === "regiones" && <div className="entry-panel p-6">
-          <p className="eyebrow">Las ocho regiones</p>
-          <ul className="mt-4 space-y-2.5">
-            {regions.map((r) => (
-              <li key={r.id} className="flex items-center gap-3 text-sm">
-                <span className="size-3.5 shrink-0 rounded-sm border border-border" style={{ background: REGION_COLORS[r.id] }} aria-hidden="true" />
-                <span className="font-japanese text-base text-primary">{r.ja}</span>
-                <span className="text-foreground">{r.es}</span>
-                <span className="ml-auto min-w-0 text-right text-xs text-muted-foreground">{r.ca}</span>
-              </li>
-            ))}
-          </ul>
-        </div>}
       </aside>
     </div>
   );
