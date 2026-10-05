@@ -244,5 +244,64 @@ export function JapanMap() {
         </div>
       </aside>
     </div>
+
+    {mode === "prefecturas" && (
+      <section className="atlas-section mt-14">
+        <p className="eyebrow">都道府県 · Todōfuken</p>
+        <h2 className="section-heading mt-3">Tipos de prefecturas</h2>
+        <p className="mt-4 max-w-2xl text-sm leading-relaxed text-muted-foreground md:text-base">
+          El sistema administrativo japonés (都道府県 / todōfuken) divide el territorio en cuatro categorías,
+          cada una con su propio sufijo en el nombre:
+        </p>
+        <div className="mt-8 grid gap-4 sm:grid-cols-2 xl:grid-cols-4">
+          {([
+            { type: "to" as PrefType, count: "1 prefectura metropolitana", body: "Corresponde a Tokio.", prefectures: ["Tokio"] },
+            { type: "do" as PrefType, count: "1 territorio o circuito", body: "Corresponde a Hokkaidō.", prefectures: ["Hokkaidō"] },
+            { type: "fu" as PrefType, count: "2 prefecturas urbanas", body: "Son Osaka y Kioto.", prefectures: ["Osaka", "Kioto"] },
+            { type: "ken" as PrefType, count: "43 prefecturas rurales o comunes", body: "El resto del país.", prefectures: [] },
+          ]).map((c) => {
+            const info = PREF_TYPE_INFO[c.type];
+            return (
+              <div key={c.type} className="entry-panel p-6">
+                <div className="flex items-baseline gap-3">
+                  <span className="font-japanese text-4xl text-primary">{info.ja}</span>
+                  <span className="font-display text-lg font-semibold text-foreground">{info.es}</span>
+                </div>
+                <p className="mt-3 text-sm font-medium text-foreground">{c.count}</p>
+                <p className="mt-1 text-sm text-muted-foreground">{c.body}</p>
+              </div>
+            );
+          })}
+        </div>
+
+        <h3 className="mt-14 text-center font-display text-2xl font-semibold text-foreground md:text-3xl">Las 47 prefecturas</h3>
+        <p className="mx-auto mt-3 max-w-2xl text-center text-sm leading-relaxed text-muted-foreground">
+          Toca o pulsa una prefectura para verla resaltada en el mapa. El sufijo indica su categoría.
+        </p>
+        <div className="mt-8 grid grid-cols-2 gap-3 sm:grid-cols-3 lg:grid-cols-4 xl:grid-cols-6">
+          {prefectures.map((p) => {
+            const info = PREF_TYPE_INFO[prefectureType(p)];
+            const active = activePrefecture?.id === p.id;
+            return (
+              <button
+                key={p.id}
+                type="button"
+                onClick={() => { setTerritory(null); setSelectedPrefecture(p); }}
+                aria-label={`${p.ja} · ${p.es} (${info.es})`}
+                className={`entry-panel flex flex-col items-start gap-1 p-4 text-left transition-all duration-150 hover:-translate-y-0.5 hover:shadow-md focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary ${active ? "ring-2 ring-primary" : ""}`}
+              >
+                <span className="font-japanese text-xl leading-snug text-primary">{p.ja}</span>
+                <span className="text-sm font-medium text-foreground">{p.es}</span>
+                <span className="mt-1 flex items-center gap-1.5 text-xs text-muted-foreground">
+                  <span className="font-japanese text-sm text-gold">{info.ja}</span>
+                  <span>{info.es}</span>
+                </span>
+              </button>
+            );
+          })}
+        </div>
+      </section>
+    )}
+    </>
   );
 }
