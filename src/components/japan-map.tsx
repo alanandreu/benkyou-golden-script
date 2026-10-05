@@ -138,6 +138,7 @@ export function JapanMap() {
   );
 
   return (
+    <>
     <div className="grid gap-8 lg:grid-cols-[1fr_340px]">
       <div>
         <div className="mb-6 inline-flex rounded-full border border-border bg-secondary/60 p-1" role="tablist" aria-label="Modo del mapa">
