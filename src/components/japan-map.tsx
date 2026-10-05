@@ -40,6 +40,19 @@ const PREFECTURE_TONES = [
   "oklch(0.86 0.06 85)",
 ];
 
+// Categorías del sistema administrativo (todōfuken), derivadas del sufijo del nombre japonés.
+type PrefType = "to" | "do" | "fu" | "ken";
+const PREF_TYPE_INFO: Record<PrefType, { ja: string; es: string; ca: string }> = {
+  to: { ja: "都", es: "To", ca: "To" },
+  do: { ja: "道", es: "Dō", ca: "Dō" },
+  fu: { ja: "府", es: "Fu", ca: "Fu" },
+  ken: { ja: "県", es: "Ken", ca: "Ken" },
+};
+const prefectureType = (p: Prefecture): PrefType => {
+  const last = p.ja.slice(-1);
+  return last === "都" ? "to" : last === "道" ? "do" : last === "府" ? "fu" : "ken";
+};
+
 export function JapanMap() {
   const [mode, setMode] = useState<Mode>("regiones");
   const [selectedRegion, setSelectedRegion] = useState<RegionId | null>(null);
