@@ -149,9 +149,9 @@ export function JapanMap() {
             </defs>
             <g clipPath="url(#jp-main-clip)">{renderLayer(false)}</g>
             <g aria-label="Islas alejadas: Okinawa, islas Ryūkyū y Senkaku, ampliadas para mayor visibilidad">
-              <path d="M400,1020 V750 Q400,724 426,724 H818 Q844,724 844,750" fill="none" stroke="var(--gold)" strokeOpacity={0.6} strokeWidth={1} strokeDasharray="7 6" strokeLinecap="round" />
-              <text x={428} y={756} fill="var(--primary)" fontSize={12} className="font-japanese">沖縄・琉球諸島</text>
-              <text x={428} y={773} fill="var(--muted-foreground)" fontSize={9}>Islas alejadas · ampliadas para mayor visibilidad</text>
+              <path d="M400,1020 V750 Q400,724 426,724 H844" fill="none" stroke="var(--gold)" strokeOpacity={0.6} strokeWidth={1} strokeDasharray="7 6" strokeLinecap="round" />
+              <text x={428} y={757} fill="var(--primary)" fontSize={16} className="font-japanese">沖縄・琉球諸島</text>
+              <text x={428} y={779} fill="var(--muted-foreground)" fontSize={12}>Islas alejadas · ampliadas para mayor visibilidad</text>
               <g transform={`translate(428 748) scale(${INSET_SCALE}) translate(268 -936)`}>
                 <g clipPath="url(#jp-inset-clip)">{renderLayer(true)}</g>
               </g>
