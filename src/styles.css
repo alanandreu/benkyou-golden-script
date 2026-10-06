@@ -83,6 +83,15 @@
 .section-rule { flex: 1; height: 1px; background: var(--border); }
 .eyebrow { color: var(--gold); font-size: 10px; font-weight: 700; letter-spacing: .2em; text-transform: uppercase; }
 .entry-panel { box-shadow: 0 15px 38px -30px color-mix(in oklab, var(--primary) 45%, transparent); }
+.panel-plate-accent { border-top: 2px solid var(--primary); box-shadow: 0 14px 30px -22px color-mix(in oklab, var(--primary) 38%, transparent); }
+.panel-hero { background: var(--primary); color: var(--primary-foreground); box-shadow: 8px 8px 0 -2px color-mix(in oklab, var(--gold) 40%, transparent); }
+.panel-hero-rule { border-color: color-mix(in oklab, var(--primary-foreground) 14%, transparent); }
+.panel-tint { background: color-mix(in oklab, var(--secondary) 55%, transparent); border: 1px solid var(--border); }
+.map-plate { border: 1px solid var(--border); background: var(--background); box-shadow: 0 22px 50px -34px color-mix(in oklab, var(--primary) 40%, transparent); }
+.pref-grid-card { border: 1px solid var(--border); transition: border-color .2s ease, transform .2s ease, box-shadow .2s ease; }
+.pref-grid-card:hover { border-color: var(--gold); transform: translateY(-2px); }
+.pref-card-tokyo { background: var(--primary); color: var(--primary-foreground); border-color: var(--primary); }
+.pref-card-tokyo:hover { border-color: var(--primary); box-shadow: 4px 4px 0 -1px color-mix(in oklab, var(--gold) 45%, transparent); transform: translateY(-2px); }
 .entry-tag { border: 1px solid var(--border); padding: 5px 10px; color: var(--muted-foreground); font-size: 10px; }
 .lang-label { display: inline-block; width: 32px; color: var(--gold); font-size: 10px; font-weight: 800; letter-spacing: .1em; }
 .explore-card { transition: transform .25s ease, border-color .25s ease, box-shadow .25s ease; }
