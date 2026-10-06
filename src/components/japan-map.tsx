@@ -1,3 +1,5 @@
+// ============= Full file contents =============
+
 import { useMemo, useState } from "react";
 import { prefectures, regions, type Prefecture, type RegionId } from "@/lib/japan-geo";
 import { regionPaths } from "@/lib/japan-regions";
@@ -141,21 +143,24 @@ export function JapanMap() {
     <>
     <div className="grid gap-8 lg:grid-cols-[1fr_340px]">
       <div>
-        <div className="mb-6 inline-flex rounded-full border border-border bg-secondary/60 p-1" role="tablist" aria-label="Modo del mapa">
-          {(["regiones", "prefecturas"] as const).map((m) => (
-            <Button
-              key={m}
-              role="tab"
-              aria-selected={mode === m}
-              variant="ghost"
-              onClick={() => { setMode(m); setSelectedRegion(null); setHoveredRegion(null); setSelectedPrefecture(null); setHoveredPrefecture(null); setTerritory(null); }}
-              className={`rounded-full px-5 py-2 text-[11px] font-semibold uppercase tracking-[0.18em] transition-colors ${mode === m ? "bg-primary text-primary-foreground shadow-sm hover:bg-primary/90 hover:text-primary-foreground" : "text-muted-foreground hover:text-primary"}`}
-            >
-              {m === "regiones" ? "Regiones" : "Prefecturas"}
-            </Button>
-          ))}
+        <div className="mb-6 flex flex-wrap items-center gap-x-4 gap-y-3 border-b border-border pb-5">
+          <span className="eyebrow shrink-0">01 / Modo de visualización</span>
+          <div className="inline-flex rounded-full border border-border bg-secondary/60 p-1" role="tablist" aria-label="Modo del mapa">
+            {(["regiones", "prefecturas"] as const).map((m) => (
+              <Button
+                key={m}
+                role="tab"
+                aria-selected={mode === m}
+                variant="ghost"
+                onClick={() => { setMode(m); setSelectedRegion(null); setHoveredRegion(null); setSelectedPrefecture(null); setHoveredPrefecture(null); setTerritory(null); }}
+                className={`rounded-full px-5 py-2 text-[11px] font-semibold uppercase tracking-[0.18em] transition-colors ${mode === m ? "bg-primary text-primary-foreground shadow-sm hover:bg-primary/90 hover:text-primary-foreground" : "text-muted-foreground hover:text-primary"}`}
+              >
+                {m === "regiones" ? "Regiones" : "Prefecturas"}
+              </Button>
+            ))}
+          </div>
         </div>
-        <div className="entry-panel relative overflow-hidden p-4 md:p-6">
+        <div className="map-plate relative overflow-hidden p-4 md:p-6">
           <svg viewBox="-20 0 890 1080" className="mx-auto w-full" role="img" aria-label={mode === "regiones" ? "Mapa de las ocho regiones de Japón" : "Mapa de las 47 prefecturas de Japón"}>
             <defs>
               <clipPath id="jp-main-clip"><path clipRule="evenodd" d={`M-400,-100 H1300 V1400 H-400 Z ${INSET_SOURCE}`} /></clipPath>
@@ -175,7 +180,7 @@ export function JapanMap() {
       </div>
 
       <aside className="space-y-6">
-        <div className="entry-panel p-6">
+        <div className="panel-plate-accent bg-background p-8">
           {territory ? (
             <div className="animate-rise">
               <p className="eyebrow">Territorio en disputa</p>
@@ -214,92 +219,107 @@ export function JapanMap() {
           )}
         </div>
 
-        {mode === "regiones" && <div className="entry-panel p-6">
-          <p className="eyebrow">Las ocho regiones</p>
-          <ul className="mt-4 space-y-2.5">
+        {mode === "regiones" && <div className="panel-hero p-8">
+          <p className="text-[10px] font-bold uppercase tracking-[0.2em] text-gold-light">Las ocho regiones</p>
+          <ul className="mt-4">
             {regions.map((r) => (
-              <li key={r.id} className="flex items-center gap-3 text-sm">
-                <span className="size-3.5 shrink-0 rounded-sm border border-border" style={{ background: REGION_COLORS[r.id] }} aria-hidden="true" />
-                <span className="font-japanese text-base text-primary">{r.ja}</span>
-                <span className="text-foreground">{r.es}</span>
-                <span className="ml-auto min-w-0 text-right text-xs text-muted-foreground">{r.ca}</span>
+              <li key={r.id} className="panel-hero-rule flex items-center gap-3 border-b py-2.5 text-sm last:border-b-0 last:pb-0 first:pt-0">
+                <span className="size-3.5 shrink-0 rounded-sm" style={{ background: REGION_COLORS[r.id] }} aria-hidden="true" />
+                <span className="font-japanese text-base text-gold-light">{r.ja}</span>
+                <span className="text-primary-foreground/90">{r.es}</span>
+                <span className="ml-auto min-w-0 text-right text-xs text-primary-foreground/55">{r.ca}</span>
               </li>
             ))}
           </ul>
         </div>}
 
-        <div className="entry-panel p-6">
+        <div className="panel-tint p-8">
           <p className="eyebrow">Territorios en disputa</p>
-          <ul className="mt-4 space-y-2.5">
+          <ul className="mt-5 space-y-3.5">
             {TERRITORIES.map((t) => (
               <li key={t.id}>
-                <button type="button" onClick={() => setTerritory(t)} className="flex w-full items-center gap-3 text-left text-sm hover:text-primary">
-                  <span className="size-3.5 shrink-0 rounded-full border border-dashed border-gold bg-gold/20" aria-hidden="true" />
+                <button type="button" onClick={() => setTerritory(t)} className="flex w-full items-center gap-3 text-left text-sm transition-colors hover:text-primary">
+                  <span className="size-2.5 shrink-0 rounded-full border border-dashed border-gold bg-gold/25" aria-hidden="true" />
                   <span className="font-japanese text-base text-primary">{t.ja}</span>
                   <span className="text-foreground">{t.es}</span>
                 </button>
               </li>
             ))}
           </ul>
-          <p className="mt-4 text-xs leading-relaxed text-muted-foreground">Se señalan con círculo dorado discontinuo. Su soberanía es objeto de disputa internacional.</p>
+          <p className="mt-5 border-l-2 border-border pl-4 text-xs italic leading-relaxed text-muted-foreground">Se señalan con círculo dorado discontinuo. Su soberanía es objeto de disputa internacional.</p>
         </div>
       </aside>
     </div>
 
     {mode === "prefecturas" && (
-      <section className="atlas-section mt-14">
-        <p className="eyebrow">都道府県 · Todōfuken</p>
-        <h2 className="section-heading mt-3">Tipos de prefecturas</h2>
-        <p className="mt-4 max-w-2xl text-sm leading-relaxed text-muted-foreground md:text-base">
-          El sistema administrativo japonés (都道府県 / todōfuken) divide el territorio en cuatro categorías,
-          cada una con su propio sufijo en el nombre:
-        </p>
-        <div className="mt-8 grid gap-4 sm:grid-cols-2 xl:grid-cols-4">
-          {([
-            { type: "to" as PrefType, count: "1 prefectura metropolitana", body: "Corresponde a Tokio.", prefectures: ["Tokio"] },
-            { type: "do" as PrefType, count: "1 territorio o circuito", body: "Corresponde a Hokkaidō.", prefectures: ["Hokkaidō"] },
-            { type: "fu" as PrefType, count: "2 prefecturas urbanas", body: "Son Osaka y Kioto.", prefectures: ["Osaka", "Kioto"] },
-            { type: "ken" as PrefType, count: "43 prefecturas rurales o comunes", body: "El resto del país.", prefectures: [] },
-          ]).map((c) => {
-            const info = PREF_TYPE_INFO[c.type];
-            return (
-              <div key={c.type} className="entry-panel p-6">
-                <div className="flex items-baseline gap-3">
-                  <span className="font-japanese text-4xl text-primary">{info.ja}</span>
-                  <span className="font-display text-lg font-semibold text-foreground">{info.es}</span>
-                </div>
-                <p className="mt-3 text-sm font-medium text-foreground">{c.count}</p>
-                <p className="mt-1 text-sm text-muted-foreground">{c.body}</p>
-              </div>
-            );
-          })}
-        </div>
+      <section className="mt-14">
+        <div className="panel-tint relative overflow-hidden rounded-sm p-6 sm:p-10 md:p-12">
+          <span aria-hidden="true" className="pointer-events-none absolute right-5 top-4 select-none font-japanese text-7xl leading-none text-primary opacity-[0.06] md:right-10 md:top-8 md:text-8xl">都道府県</span>
 
-        <h3 className="mt-14 text-center font-display text-2xl font-semibold text-foreground md:text-3xl">Las 47 prefecturas</h3>
-        <p className="mx-auto mt-3 max-w-2xl text-center text-sm leading-relaxed text-muted-foreground">
-          Toca o pulsa una prefectura para verla resaltada en el mapa. El sufijo indica su categoría.
-        </p>
-        <div className="mt-8 grid grid-cols-2 gap-3 sm:grid-cols-3 lg:grid-cols-4 xl:grid-cols-6">
-          {prefectures.map((p) => {
-            const info = PREF_TYPE_INFO[prefectureType(p)];
-            const active = activePrefecture?.id === p.id;
-            return (
-              <button
-                key={p.id}
-                type="button"
-                onClick={() => { setTerritory(null); setSelectedPrefecture(p); }}
-                aria-label={`${p.ja} · ${p.es} (${info.es})`}
-                className={`entry-panel flex flex-col items-start gap-1 p-4 text-left transition-all duration-150 hover:-translate-y-0.5 hover:shadow-md focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary ${active ? "ring-2 ring-primary" : ""}`}
-              >
-                <span className="font-japanese text-xl leading-snug text-primary">{p.ja}</span>
-                <span className="text-sm font-medium text-foreground">{p.es}</span>
-                <span className="mt-1 flex items-center gap-1.5 text-xs text-muted-foreground">
-                  <span className="font-japanese text-sm text-gold">{info.ja}</span>
-                  <span>{info.es}</span>
-                </span>
-              </button>
-            );
-          })}
+          <div className="relative">
+            <p className="eyebrow">都道府県 · Todōfuken</p>
+            <h2 className="section-heading mt-3">Tipos de prefecturas</h2>
+            <p className="mt-4 max-w-2xl text-sm leading-relaxed text-muted-foreground md:text-base">
+              El sistema administrativo japonés (都道府県 / todōfuken) divide el territorio en cuatro categorías,
+              cada una con su propio sufijo en el nombre:
+            </p>
+          </div>
+
+          <div className="relative mt-8 grid gap-4 sm:grid-cols-2 xl:grid-cols-4">
+            {([
+              { type: "to" as PrefType, count: "1 prefectura metropolitana", body: "Corresponde a Tokio.", prefectures: ["Tokio"] },
+              { type: "do" as PrefType, count: "1 territorio o circuito", body: "Corresponde a Hokkaidō.", prefectures: ["Hokkaidō"] },
+              { type: "fu" as PrefType, count: "2 prefecturas urbanas", body: "Son Osaka y Kioto.", prefectures: ["Osaka", "Kioto"] },
+              { type: "ken" as PrefType, count: "43 prefecturas rurales o comunes", body: "El resto del país.", prefectures: [] },
+            ]).map((c, i) => {
+              const info = PREF_TYPE_INFO[c.type];
+              const accent = i === 0 ? "border-l-primary" : i === 1 ? "border-l-gold" : i === 2 ? "border-l-primary/50" : "border-l-border";
+              return (
+                <div key={c.type} className={`bg-background border border-border border-l-4 p-6 shadow-[0_10px_24px_-18px_color-mix(in_oklab,var(--primary)_30%,transparent)] transition-shadow hover:shadow-[0_16px_30px_-16px_color-mix(in_oklab,var(--primary)_40%,transparent)] ${accent}`}>
+                  <p className="text-[10px] font-semibold uppercase tracking-[0.22em] text-muted-foreground">{`0${i + 1} / 04`}</p>
+                  <div className="mt-4 flex items-baseline gap-3">
+                    <span className="font-japanese text-4xl text-primary">{info.ja}</span>
+                    <span className="font-display text-lg font-semibold text-foreground">{info.es}</span>
+                  </div>
+                  <p className="mt-3 text-sm font-medium text-foreground">{c.count}</p>
+                  <p className="mt-1 text-sm text-muted-foreground">{c.body}</p>
+                </div>
+              );
+            })}
+          </div>
+
+          <h3 className="mt-14 text-center font-display text-2xl font-semibold text-foreground md:text-3xl">Las 47 prefecturas</h3>
+          <p className="mx-auto mt-3 max-w-2xl text-center text-sm leading-relaxed text-muted-foreground">
+            Toca o pulsa una prefectura para verla resaltada en el mapa. El sufijo indica su categoría.
+          </p>
+          <div className="relative mt-8 grid grid-cols-2 gap-3 sm:grid-cols-3 lg:grid-cols-4 xl:grid-cols-6">
+            {prefectures.map((p, i) => {
+              const info = PREF_TYPE_INFO[prefectureType(p)];
+              const active = activePrefecture?.id === p.id;
+              const isTokyo = p.id === 13;
+              const tinted = !isTokyo && i % 2 === 1;
+              return (
+                <button
+                  key={p.id}
+                  type="button"
+                  onClick={() => { setTerritory(null); setSelectedPrefecture(p); }}
+                  aria-label={`${p.ja} · ${p.es} (${info.es})`}
+                  className={`flex flex-col items-start gap-1 p-4 text-left focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary ${isTokyo ? "pref-grid-card pref-card-tokyo" : "pref-grid-card"} ${tinted ? "bg-secondary/40" : isTokyo ? "" : "bg-background"} ${active ? (isTokyo ? "ring-2 ring-gold ring-offset-2" : "ring-2 ring-primary ring-offset-2") : ""}`}
+                >
+                  <span className={`flex w-full items-center justify-between text-[9px] font-semibold uppercase tracking-[0.18em] ${isTokyo ? "text-gold-light" : "text-muted-foreground"}`}>
+                    <span>{String(i + 1).padStart(2, "0")} / {info.ja}</span>
+                    <span className={`size-1 rounded-full ${i % 3 === 0 ? "bg-gold" : "bg-transparent"}`} aria-hidden="true" />
+                  </span>
+                  <span className={`mt-2 font-japanese text-xl leading-snug ${isTokyo ? "text-primary-foreground" : "text-primary"}`}>{p.ja}</span>
+                  <span className={`text-sm font-medium ${isTokyo ? "text-primary-foreground/90" : "text-foreground"}`}>{p.es}</span>
+                  <span className={`mt-1 flex items-center gap-1.5 text-xs ${isTokyo ? "text-primary-foreground/70" : "text-muted-foreground"}`}>
+                    <span className={`font-japanese text-sm ${isTokyo ? "text-gold-light" : "text-gold"}`}>{info.ja}</span>
+                    <span>{info.es}</span>
+                  </span>
+                </button>
+              );
+            })}
+          </div>
         </div>
       </section>
     )}
