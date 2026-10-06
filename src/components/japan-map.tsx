@@ -254,7 +254,7 @@ export function JapanMap() {
     {mode === "prefecturas" && (
       <section className="mt-14">
         <div className="panel-tint relative overflow-hidden rounded-sm p-6 sm:p-10 md:p-12">
-          <span aria-hidden="true" className="pointer-events-none absolute right-5 top-4 select-none font-japanese text-7xl leading-none text-primary opacity-[0.06] md:right-10 md:top-8 md:text-8xl">都道府県</span>
+          <span aria-hidden="true" className="pointer-events-none absolute right-4 top-3 select-none font-japanese text-5xl leading-none text-primary opacity-[0.05] md:right-10 md:top-8 md:text-8xl md:opacity-[0.06]">都道府県</span>
 
           <div className="relative">
             <p className="eyebrow">都道府県 · Todōfuken</p>
