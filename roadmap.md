@@ -3,3 +3,5 @@
 - [x] Añadir minijuego de secuencia de trazos auténticos con cartas visuales en Juegos.
 - [x] Verificar las vistas separadas de regiones y prefecturas en escritorio y móvil, incluida la selección táctil.
 - [ ] Recuperar y volver a mostrar exactamente las tres propuestas originales de estilado de Geografía, sin generar variantes nuevas.
+- [ ] Ampliar hiragana y katakana, incluidos kana obsoletos, y mejorar la ficha en móvil.
+- [ ] Añadir una selección documentada de man’yōgana y verificar las fichas.
