@@ -7,7 +7,7 @@ export type Script = "Hiragana" | "Katakana" | "Kanji" | "Man’yōgana";
 function parse(data: string, note?: string): Character[] {
   return data.split(" ").filter(Boolean).map((pair) => {
     const [glyph = "", reading = ""] = pair.split(":");
-    return { glyph, reading, note };
+    return { glyph, reading, ...(note ? { note } : {}) };
   });
 }
 function katakana(characters: Character[]): Character[] {

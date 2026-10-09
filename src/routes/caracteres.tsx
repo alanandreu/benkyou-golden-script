@@ -5,8 +5,8 @@ import { characterGroups, findCharacter, type Script } from "@/lib/kana";
 
 const scripts: Script[] = ["Hiragana", "Katakana", "Kanji", "Man’yōgana"];
 export const Route = createFileRoute("/caracteres")({
-  validateSearch: (search: Record<string, unknown>): { script: Script } => ({
-    script: scripts.includes(search.script as Script) ? search.script as Script : "Hiragana",
+  validateSearch: (search: Record<string, unknown>): { script?: Script } => ({
+    script: scripts.includes(search["script"] as Script) ? search["script"] as Script : "Hiragana",
   }),
   head: () => ({ meta: [
     { title: "Hiragana, katakana y man’yōgana — BENKYOU" },
@@ -19,7 +19,7 @@ export const Route = createFileRoute("/caracteres")({
 
 function CharactersPage() {
   const { script } = Route.useSearch();
-  return <CharacterCatalog key={script} script={script} />;
+  return <CharacterCatalog key={script} script={script ?? "Hiragana"} />;
 }
 
 function CharacterCatalog({ script }: { script: Script }) {
