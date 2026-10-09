@@ -474,3 +474,9 @@ DAMAGES, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING
 FROM, OUT OF THE USE OR INABILITY TO USE THE FONT SOFTWARE OR FROM
 OTHER DEALINGS IN THE FONT SOFTWARE.
 
+
+BENKYOU Kana Supplement is a renamed subset of GNU Unifont Upper 17.0.03,
+containing ten supplementary kana glyphs. Original font credits and
+copyright notices are retained in the font metadata. Licensed under
+the SIL Open Font License 1.1 as reproduced above.
+Source: https://unifoundry.com/unifont/
