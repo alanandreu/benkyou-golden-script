@@ -2,7 +2,7 @@ import { hentaigana } from "./hentaigana";
 
 export type Character = { glyph: string; reading: string; note?: string; strokes?: number };
 export type CharacterGroup = { id: string; title: string; description?: string; characters: Character[] };
-export type Script = "Hiragana" | "Katakana" | "Kanji" | "Man’yōgana";
+export type Script = "Hiragana" | "Katakana" | "Hentaigana" | "Kanji" | "Man’yōgana";
 
 function parse(data: string, note?: string): Character[] {
   return data.split(" ").filter(Boolean).map((pair) => {
@@ -32,7 +32,6 @@ export const characterGroups: Record<Script, CharacterGroup[]> = {
     { id: "small", title: "Kana pequeños", characters: small },
     { id: "archaic", title: "Kana obsoletos y arcaicos", characters: archaicH },
     { id: "special", title: "Formas y signos especiales", characters: parse("𛄲:ko 𛅐:wi 𛅑:we 𛅒:wo ゝ:repetición ゞ:repetición-sonora ゟ:yori ゛:dakuten ゜:handakuten ー:vocal-larga", "Forma pequeña especial, ligadura o signo ortográfico; no es un kana básico independiente.") },
-    { id: "hentaigana", title: "Hentaigana · variantes históricas", description: "285 variantes cursivas codificadas en Unicode. No son 285 sonidos distintos; varias formas representan la misma lectura.", characters: hentaigana },
   ],
   Katakana: [
     { id: "basic", title: "Gojūon · básicos", characters: katakana(basic) },
@@ -43,6 +42,9 @@ export const characterGroups: Record<Script, CharacterGroup[]> = {
     { id: "archaic", title: "Kana obsoletos y arcaicos", characters: archaicK },
     { id: "ainu", title: "Extensiones para el ainu", description: "Kana pequeños usados para consonantes finales en la escritura del ainu.", characters: parse("ㇰ:k ㇱ:sh ㇲ:s ㇳ:t ㇴ:n ㇵ:h ㇶ:h ㇷ:h ㇸ:h ㇹ:h ㇺ:m ㇻ:r ㇼ:r ㇽ:r ㇾ:r ㇿ:r ㇷ゚:p", "Extensión del katakana para el ainu. Las formas de h y r se eligen según la vocal precedente.") },
     { id: "special", title: "Formas y signos especiales", characters: parse("𛅕:ko 𛅤:wi 𛅥:we 𛅦:wo 𛅧:n ヽ:repetición ヾ:repetición-sonora ヿ:koto ー:vocal-larga ゠:doble-guion ・:separador ゛:dakuten ゜:handakuten", "Forma pequeña especial, ligadura o signo ortográfico; no es un kana básico independiente.") },
+  ],
+  Hentaigana: [
+    { id: "hentaigana", title: "Hentaigana · variantes históricas", description: "285 variantes cursivas codificadas en Unicode. No son 285 sonidos distintos; varias formas representan la misma lectura.", characters: hentaigana },
   ],
   Kanji: [{ id: "basic", title: "Primeros kanji", characters: [
     { glyph: "日", reading: "sol · día", strokes: 4 }, { glyph: "本", reading: "origen · libro", strokes: 5 }, { glyph: "人", reading: "persona", strokes: 2 }, { glyph: "山", reading: "montaña", strokes: 3 }, { glyph: "川", reading: "río", strokes: 3 }, { glyph: "木", reading: "árbol", strokes: 4 }, { glyph: "水", reading: "agua", strokes: 4 }, { glyph: "火", reading: "fuego", strokes: 4 }, { glyph: "月", reading: "luna · mes", strokes: 4 }, { glyph: "花", reading: "flor", strokes: 7 },
@@ -58,4 +60,30 @@ export function findCharacter(script: Script, glyph?: string) {
   const group = characterGroups[script][0];
   const character = group?.characters[0];
   return group && character ? { character, group } : undefined;
+}
+const layouts: Record<string, string> = {
+  basic: "あいうえお かきくけこ さしすせそ たちつてと なにぬねの はひふへほ まみむめも や_ゆ_よ らりるれろ わ___を ん____",
+  voiced: "がぎぐげご ざじずぜぞ だぢづでど ばびぶべぼ ぱぴぷぺぽ __ゔ__",
+  small: "ぁぃぅぇぉ __っ__ ゃ_ゅ_ょ ゎ____ ゕ___ゖ",
+};
+const chunk = <T,>(items: T[], size: number) => Array.from({ length: Math.ceil(items.length / size) }, (_, i) => items.slice(i * size, i * size + size));
+
+/** Filas en orden de tabla (occidental: cada fila es una serie consonántica). */
+export function tableRows(script: Script, group: CharacterGroup): (Character | null)[][] {
+  const layout = (script === "Hiragana" || script === "Katakana") ? layouts[group.id] : undefined;
+  if (layout) {
+    const byGlyph = new Map(group.characters.map((c) => [c.glyph, c]));
+    return layout.split(" ").map((row) => Array.from(row).map((g) => {
+      if (g === "_") return null;
+      const glyph = script === "Katakana" ? katakana([{ glyph: g, reading: "" }])[0]!.glyph : g;
+      return byGlyph.get(glyph) ?? null;
+    }));
+  }
+  if (group.id === "contracted") return chunk(group.characters, 3);
+  if (group.id === "hentaigana") {
+    const rows: Character[][] = [];
+    for (const c of group.characters) { const last = rows.at(-1); if (last && last[0]!.reading === c.reading) last.push(c); else rows.push([c]); }
+    return rows;
+  }
+  return chunk(group.characters, 5);
 }
