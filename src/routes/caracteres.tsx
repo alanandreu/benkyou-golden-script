@@ -95,10 +95,10 @@ function CharacterCatalog({ script }: { script: Script }) {
 function KanaTable({ rows, direction, selected, onSelect }: { rows: (Character | null)[][]; direction: "west" | "east"; selected: string; onSelect: (glyph: string) => void }) {
   const width = Math.max(...rows.map((r) => r.length));
   const padded = rows.map((r) => [...r, ...Array<Character | null>(width - r.length).fill(null)]);
-  // Oriental: cada serie pasa a ser una columna vertical, leídas de derecha a izquierda.
-  const grid = direction === "west" ? padded : Array.from({ length: width }, (_, i) => padded.map((r) => r[i] ?? null).reverse());
+  // Oriental: cada serie pasa a ser una columna vertical, leídas de derecha a izquierda (dir="rtl" coloca la primera a la derecha y arranca el scroll allí).
+  const grid = direction === "west" ? padded : Array.from({ length: width }, (_, i) => padded.map((r) => r[i] ?? null));
   const cols = grid[0]?.length ?? 1;
-  return <div className="overflow-x-auto pb-1">
+  return <div className="overflow-x-auto pb-1" dir={direction === "east" ? "rtl" : "ltr"}>
     <div className="grid gap-1 sm:gap-1.5" style={{ gridTemplateColumns: `repeat(${cols}, minmax(${cols > 7 ? "40px" : "0"}, 1fr))`, maxWidth: cols <= 5 ? "36rem" : undefined }}>
       {grid.flat().map((item, i) => item ? <Button key={item.glyph} variant="ghost" onClick={() => onSelect(item.glyph)} aria-label={`${item.glyph}, ${item.reading}`} aria-pressed={selected === item.glyph} className={`h-[58px] min-w-0 w-full flex-col gap-0.5 rounded-sm border px-0.5 py-1.5 sm:h-[72px] ${selected === item.glyph ? "border-gold bg-gold-pale text-primary" : "border-border bg-card text-foreground hover:border-gold hover:bg-secondary"}`}>
         <span className={`font-japanese ${Array.from(item.glyph).length > 1 ? "text-lg sm:text-2xl" : "text-xl sm:text-3xl"}`} lang="ja">{item.glyph}</span>
