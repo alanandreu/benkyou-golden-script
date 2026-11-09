@@ -5,3 +5,6 @@
 - [ ] Recuperar y volver a mostrar exactamente las tres propuestas originales de estilado de Geografía, sin generar variantes nuevas. Bloqueado: previsualizaciones originales caducadas; requiere las imágenes originales.
 - [x] Ampliar hiragana y katakana, incluidos kana obsoletos, y mejorar la ficha en móvil.
 - [x] Añadir una selección documentada de man’yōgana y verificar las fichas.
+- [ ] Ajustar encabezados y legibilidad conservando la identidad de BENKYOU.
+- [ ] Unificar controles de selección y mejorar la cohesión entre páginas.
+- [ ] Comprobar las páginas y sus controles en ordenador y móvil.
