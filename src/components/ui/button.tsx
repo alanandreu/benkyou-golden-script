@@ -18,10 +18,11 @@ const buttonVariants = cva(
         link: "text-primary underline-offset-4 hover:underline",
         gold: "bg-gold text-primary hover:bg-gold/85",
         porcelain: "border border-primary/20 bg-card text-primary hover:bg-secondary",
+        choice: "min-h-10 border border-border bg-card text-primary hover:border-gold hover:bg-secondary aria-pressed:border-primary aria-pressed:bg-primary aria-pressed:text-primary-foreground aria-selected:border-primary aria-selected:bg-primary aria-selected:text-primary-foreground aria-[current=page]:border-primary aria-[current=page]:bg-primary aria-[current=page]:text-primary-foreground",
       },
       size: {
-        default: "h-9 px-4 py-2",
-        sm: "h-8 rounded-md px-3 text-xs",
+        default: "h-10 px-4 py-2",
+        sm: "h-9 rounded-md px-3 text-sm",
         lg: "h-10 rounded-md px-8",
         icon: "h-9 w-9",
       },

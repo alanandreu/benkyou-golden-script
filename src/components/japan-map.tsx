@@ -21,26 +21,11 @@ const TERRITORIES: Territory[] = [
 
 // Paleta aúlica: granates, dorados y beiges en armonía con la identidad BENKYOU.
 const REGION_COLORS: Record<RegionId, string> = {
-  hokkaido: "oklch(0.52 0.09 20)",
-  tohoku: "oklch(0.42 0.11 12)",
-  kanto: "oklch(0.34 0.12 10)",
-  chubu: "oklch(0.62 0.10 75)",
-  kansai: "oklch(0.72 0.11 85)",
-  chugoku: "oklch(0.55 0.07 40)",
-  shikoku: "oklch(0.47 0.10 25)",
-  kyushu: "oklch(0.80 0.09 88)",
+  hokkaido: "var(--map-hokkaido)", tohoku: "var(--map-tohoku)", kanto: "var(--primary)",
+  chubu: "var(--map-chubu)", kansai: "var(--map-kansai)", chugoku: "var(--map-chugoku)",
+  shikoku: "var(--map-shikoku)", kyushu: "var(--map-kyushu)",
 };
-
-const PREFECTURE_TONES = [
-  "oklch(0.34 0.12 10)",
-  "oklch(0.42 0.11 14)",
-  "oklch(0.50 0.09 20)",
-  "oklch(0.60 0.10 60)",
-  "oklch(0.70 0.11 82)",
-  "oklch(0.78 0.09 88)",
-  "oklch(0.56 0.07 38)",
-  "oklch(0.86 0.06 85)",
-];
+const PREFECTURE_TONES = ["var(--primary)", "var(--map-pref-2)", "var(--map-pref-3)", "var(--map-pref-4)", "var(--map-pref-5)", "var(--map-pref-6)", "var(--map-pref-7)", "var(--map-pref-8)"];
 
 // Categorías del sistema administrativo (todōfuken), derivadas del sufijo del nombre japonés.
 type PrefType = "to" | "do" | "fu" | "ken";
@@ -90,7 +75,7 @@ export function JapanMap() {
                 stroke="var(--background)"
                 strokeWidth={(activeRegion?.id === r.id ? 2.4 : 1) / (inset ? INSET_SCALE : 1)}
                 fillRule="evenodd"
-                className="cursor-pointer transition-opacity duration-150 focus:outline-none focus-visible:stroke-primary"
+                className="cursor-pointer transition-opacity duration-150 focus:outline-none focus-visible:stroke-gold"
                 opacity={activeRegion == null || activeRegion.id === r.id ? 1 : 0.55}
                 role="button"
                 tabIndex={0}
@@ -109,7 +94,7 @@ export function JapanMap() {
                 fill={PREFECTURE_TONES[(p.id - 1) % PREFECTURE_TONES.length]}
                 stroke="var(--background)"
                 strokeWidth={(activePrefecture?.id === p.id ? 2.4 : 1) / (inset ? INSET_SCALE : 1)}
-                className="cursor-pointer transition-opacity duration-150 focus:outline-none focus-visible:stroke-primary"
+                className="cursor-pointer transition-opacity duration-150 focus:outline-none focus-visible:stroke-gold"
                 opacity={activePrefecture == null || activePrefecture.id === p.id ? 1 : 0.55}
                 role="button"
                 tabIndex={0}
@@ -128,12 +113,12 @@ export function JapanMap() {
                 role="button"
                 tabIndex={0}
                 aria-label={`${t.ja} · ${t.es} (territorio en disputa)`}
-                className="cursor-pointer focus:outline-none"
+                className="group cursor-pointer focus:outline-none"
                 onClick={() => setTerritory(t)}
                 onKeyDown={(event) => { if (event.key === "Enter" || event.key === " ") { event.preventDefault(); setTerritory(t); } }}
               >
                 <circle cx={t.x} cy={t.y} r={t.r} fill="var(--gold)" fillOpacity={territory?.id === t.id ? 0.35 : 0.15} stroke="var(--gold)" strokeWidth={2} strokeDasharray="5 4" />
-                <circle cx={t.x} cy={t.y} r={3.5} fill="var(--primary)" />
+                <circle cx={t.x} cy={t.y} r={3.5} fill="var(--primary)" className="group-focus-visible:stroke-gold" strokeWidth={4} />
               </g>
             ))}
     </>
@@ -141,19 +126,19 @@ export function JapanMap() {
 
   return (
     <>
-    <div className="grid gap-8 lg:grid-cols-[1fr_340px]">
+    <div className="grid gap-5 sm:p-6 lg:grid-cols-[1fr_340px]">
       <div>
         <div className="mb-6 flex flex-wrap items-center gap-x-4 gap-y-3 border-b border-border pb-5">
           <span className="eyebrow shrink-0">01 / Modo de visualización</span>
-          <div className="inline-flex rounded-full border border-border bg-secondary/60 p-1" role="tablist" aria-label="Modo del mapa">
+          <div className="inline-flex flex-wrap gap-2" role="tablist" aria-label="Modo del mapa">
             {(["regiones", "prefecturas"] as const).map((m) => (
               <Button
                 key={m}
                 role="tab"
                 aria-selected={mode === m}
-                variant="ghost"
+                variant="choice"
                 onClick={() => { setMode(m); setSelectedRegion(null); setHoveredRegion(null); setSelectedPrefecture(null); setHoveredPrefecture(null); setTerritory(null); }}
-                className={`rounded-full px-5 py-2 text-[11px] font-semibold uppercase tracking-[0.18em] transition-colors ${mode === m ? "bg-primary text-primary-foreground shadow-sm hover:bg-primary/90 hover:text-primary-foreground" : "text-muted-foreground hover:text-primary"}`}
+                className="px-4"
               >
                 {m === "regiones" ? "Regiones" : "Prefecturas"}
               </Button>
@@ -170,7 +155,7 @@ export function JapanMap() {
             <g aria-label="Islas alejadas: Okinawa, islas Ryūkyū y Senkaku, ampliadas para mayor visibilidad">
               <path d="M400,1020 V750 Q400,724 426,724 H844" fill="none" stroke="var(--gold)" strokeOpacity={0.6} strokeWidth={1} strokeDasharray="7 6" strokeLinecap="round" />
               <text x={428} y={757} fill="var(--primary)" fontSize={16} className="font-japanese">沖縄・琉球諸島</text>
-              <text x={428} y={779} fill="var(--muted-foreground)" fontSize={12}>Islas alejadas · ampliadas para mayor visibilidad</text>
+              <text x={428} y={779} fill="var(--muted-foreground)" fontSize={16}>Islas alejadas · ampliadas</text>
               <g transform={`translate(428 748) scale(${INSET_SCALE}) translate(268 -936)`}>
                 <g clipPath="url(#jp-inset-clip)">{renderLayer(true)}</g>
               </g>
@@ -180,7 +165,7 @@ export function JapanMap() {
       </div>
 
       <aside className="space-y-6">
-        <div className="panel-plate-accent bg-background p-8">
+        <div className="panel-plate-accent bg-background p-5 sm:p-6">
           {territory ? (
             <div className="animate-rise">
               <p className="eyebrow">Territorio en disputa</p>
@@ -202,7 +187,7 @@ export function JapanMap() {
               <p className="mt-3 font-japanese text-4xl text-primary">{activePrefecture.ja}</p>
               <p className="mt-1 font-display text-2xl font-semibold text-foreground">{activePrefecture.es}</p>
               <div className="mt-4 border-t border-border pt-4">
-                <p className="text-[10px] uppercase tracking-[0.22em] text-muted-foreground">Región</p>
+                <p className="text-xs uppercase tracking-normal text-muted-foreground">Región</p>
                 <p className="mt-1 flex items-baseline gap-2 text-sm">
                   <span className="font-japanese text-lg text-gold">{regionById.get(activePrefecture.region)?.ja}</span>
                   <span className="font-medium text-foreground">{regionById.get(activePrefecture.region)?.es}</span>
@@ -219,30 +204,30 @@ export function JapanMap() {
           )}
         </div>
 
-        {mode === "regiones" && <div className="panel-hero p-8">
-          <p className="text-[10px] font-bold uppercase tracking-[0.2em] text-gold-light">Las ocho regiones</p>
+        {mode === "regiones" && <div className="panel-hero p-5 sm:p-6">
+          <p className="text-xs font-bold uppercase tracking-normal text-gold-light">Las ocho regiones</p>
           <ul className="mt-4">
             {regions.map((r) => (
               <li key={r.id} className="panel-hero-rule flex items-center gap-3 border-b py-2.5 text-sm last:border-b-0 last:pb-0 first:pt-0">
                 <span className="size-3.5 shrink-0 rounded-sm" style={{ background: REGION_COLORS[r.id] }} aria-hidden="true" />
                 <span className="font-japanese text-base text-gold-light">{r.ja}</span>
                 <span className="text-primary-foreground/90">{r.es}</span>
-                <span className="ml-auto min-w-0 text-right text-xs text-primary-foreground/55">{r.ca}</span>
+                <span className="ml-auto min-w-0 text-right text-xs text-primary-foreground/80">{r.ca}</span>
               </li>
             ))}
           </ul>
         </div>}
 
-        <div className="panel-tint p-8">
+        <div className="border-t border-border bg-secondary/40 p-5 sm:p-6">
           <p className="eyebrow">Territorios en disputa</p>
           <ul className="mt-5 space-y-3.5">
             {TERRITORIES.map((t) => (
               <li key={t.id}>
-                <button type="button" onClick={() => setTerritory(t)} className="flex w-full items-center gap-3 text-left text-sm transition-colors hover:text-primary">
+                <Button variant="ghost" onClick={() => setTerritory(t)} aria-pressed={territory?.id === t.id} className="h-auto w-full justify-start gap-3 whitespace-normal px-0 py-1 text-left text-sm hover:text-primary">
                   <span className="size-2.5 shrink-0 rounded-full border border-dashed border-gold bg-gold/25" aria-hidden="true" />
                   <span className="font-japanese text-base text-primary">{t.ja}</span>
                   <span className="text-foreground">{t.es}</span>
-                </button>
+                </Button>
               </li>
             ))}
           </ul>
@@ -253,12 +238,12 @@ export function JapanMap() {
 
     {mode === "prefecturas" && (
       <section className="mt-14">
-        <div className="panel-tint relative overflow-hidden rounded-sm p-6 sm:p-10 md:p-12">
-          <span aria-hidden="true" className="pointer-events-none absolute right-4 top-3 select-none font-japanese text-5xl leading-none text-primary opacity-[0.05] md:right-10 md:top-8 md:text-8xl md:opacity-[0.06]">都道府県</span>
+        <div className="relative overflow-hidden border-y border-border bg-secondary/35 px-0 py-8 md:py-10">
+          <span aria-hidden="true" className="pointer-events-none absolute right-4 top-3 select-none font-japanese text-5xl leading-none text-primary opacity-[0.05] md:right-10 md:top-5 sm:p-6 md:text-8xl md:opacity-[0.06]">都道府県</span>
 
           <div className="relative">
             <p className="eyebrow">都道府県 · Todōfuken</p>
-            <h2 className="section-heading mt-3">Tipos de prefecturas</h2>
+            <h2 className="mt-3 font-display text-4xl text-primary">Tipos de prefecturas</h2>
             <p className="mt-4 max-w-2xl text-sm leading-relaxed text-muted-foreground md:text-base">
               El sistema administrativo japonés (都道府県 / todōfuken) divide el territorio en cuatro categorías,
               cada una con su propio sufijo en el nombre:
@@ -275,8 +260,8 @@ export function JapanMap() {
               const info = PREF_TYPE_INFO[c.type];
               const accent = i === 0 ? "border-l-primary" : i === 1 ? "border-l-gold" : i === 2 ? "border-l-primary/50" : "border-l-border";
               return (
-                <div key={c.type} className={`bg-background border border-border border-l-4 p-6 shadow-[0_10px_24px_-18px_color-mix(in_oklab,var(--primary)_30%,transparent)] transition-shadow hover:shadow-[0_16px_30px_-16px_color-mix(in_oklab,var(--primary)_40%,transparent)] ${accent}`}>
-                  <p className="text-[10px] font-semibold uppercase tracking-[0.22em] text-muted-foreground">{`0${i + 1} / 04`}</p>
+                <div key={c.type} className={`bg-card border border-border border-l-4 p-5 ${accent}`}>
+                  <p className="text-xs font-semibold uppercase tracking-normal text-muted-foreground">{`0${i + 1} / 04`}</p>
                   <div className="mt-4 flex items-baseline gap-3">
                     <span className="font-japanese text-4xl text-primary">{info.ja}</span>
                     <span className="font-display text-lg font-semibold text-foreground">{info.es}</span>
@@ -299,14 +284,15 @@ export function JapanMap() {
               const isTokyo = p.id === 13;
               const tinted = !isTokyo && i % 2 === 1;
               return (
-                <button
+                <Button
+                  variant="ghost"
                   key={p.id}
                   type="button"
                   onClick={() => { setTerritory(null); setSelectedPrefecture(p); }}
                   aria-label={`${p.ja} · ${p.es} (${info.es})`}
-                  className={`flex flex-col items-start gap-1 p-4 text-left focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary ${isTokyo ? "pref-grid-card pref-card-tokyo" : "pref-grid-card"} ${tinted ? "bg-secondary/40" : isTokyo ? "" : "bg-background"} ${active ? (isTokyo ? "ring-2 ring-gold ring-offset-2" : "ring-2 ring-primary ring-offset-2") : ""}`}
+                  className={`h-auto whitespace-normal rounded-sm flex flex-col items-start gap-1 p-4 text-left focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary ${isTokyo ? "pref-grid-card pref-card-tokyo" : "pref-grid-card"} ${tinted ? "bg-secondary/40" : isTokyo ? "" : "bg-background"} ${active ? (isTokyo ? "ring-2 ring-gold ring-offset-2" : "ring-2 ring-primary ring-offset-2") : ""}`}
                 >
-                  <span className={`flex w-full items-center justify-between text-[9px] font-semibold uppercase tracking-[0.18em] ${isTokyo ? "text-gold-light" : "text-muted-foreground"}`}>
+                  <span className={`flex w-full items-center justify-between text-xs font-semibold uppercase tracking-normal ${isTokyo ? "text-gold-light" : "text-muted-foreground"}`}>
                     <span>{String(i + 1).padStart(2, "0")} / {info.ja}</span>
                     <span className={`size-1 rounded-full ${i % 3 === 0 ? "bg-gold" : "bg-transparent"}`} aria-hidden="true" />
                   </span>
@@ -316,7 +302,7 @@ export function JapanMap() {
                     <span className={`font-japanese text-sm ${isTokyo ? "text-gold-light" : "text-gold"}`}>{info.ja}</span>
                     <span>{info.es}</span>
                   </span>
-                </button>
+                </Button>
               );
             })}
           </div>
