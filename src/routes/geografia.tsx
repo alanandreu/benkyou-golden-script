@@ -1,4 +1,5 @@
 import { createFileRoute } from "@tanstack/react-router";
+import { PageHeading } from "@/components/page-heading";
 import { JapanMap } from "@/components/japan-map";
 
 export const Route = createFileRoute("/geografia")({
@@ -17,15 +18,8 @@ export const Route = createFileRoute("/geografia")({
 
 function GeografiaPage() {
   return (
-    <main className="mx-auto max-w-7xl px-5 py-14 md:px-10 md:py-20">
-      <header className="mb-12 max-w-2xl">
-        <p className="eyebrow">地理 · Geografía</p>
-        <h1 className="section-heading mt-3">El archipiélago japonés</h1>
-        <p className="mt-4 text-sm leading-relaxed text-muted-foreground md:text-base">
-          Japón se divide en ocho regiones tradicionales y cuarenta y siete prefecturas. Explora el mapa
-          para aprender sus nombres en japonés —una forma edificante de unir lengua y territorio.
-        </p>
-      </header>
+    <main className="mx-auto max-w-7xl px-5 py-8 md:px-10 md:py-14">
+      <PageHeading area="Territorio" title="Geografía" japanese="地理">Japón se divide en ocho regiones tradicionales y cuarenta y siete prefecturas.</PageHeading>
       <JapanMap />
     </main>
   );

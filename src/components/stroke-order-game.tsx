@@ -78,23 +78,23 @@ export function StrokeOrderGame() {
     setFeedback("");
   }
 
-  return <section className="mt-20 border-t border-border pt-12" aria-labelledby="stroke-game-title">
-    <div className="grid gap-8 lg:grid-cols-[280px_1fr]">
+  return <section className="study-section" aria-labelledby="stroke-game-title">
+    <div className="grid items-start gap-6 lg:grid-cols-[280px_1fr]">
       <div>
         <p className="eyebrow">02 / Escritura</p>
         <h2 id="stroke-game-title" className="mt-3 font-display text-4xl text-primary">Orden de trazos</h2>
         <p className="mt-3 text-sm leading-7 text-muted-foreground">Elige las cartas en el orden en que se escribe el kanji.</p>
-        <div className="mt-6 flex flex-wrap gap-2" aria-label="Nivel JLPT">
-          {levelOptions.map((option) => <Button key={option} size="sm" variant={option === level ? "default" : "porcelain"} aria-pressed={option === level} onClick={() => changeLevel(option)}>{option}</Button>)}
+        <div className="mt-4 flex flex-wrap gap-2" aria-label="Nivel JLPT">
+          {levelOptions.map((option) => <Button key={option} size="sm" variant="choice" aria-pressed={option === level} onClick={() => changeLevel(option)}>{option}</Button>)}
         </div>
         {pool.length > 0 && <div className="mt-4 flex flex-wrap gap-2" aria-label="Elige un kanji">
           {pool.map((item, index) => <Button key={item.glyph} variant={index === kanjiIndex ? "default" : "porcelain"} size="icon" aria-label={`Practicar ${item.glyph}, ${item.meaning}`} aria-pressed={index === kanjiIndex} onClick={() => changeKanji(index)} className="font-japanese text-lg">{item.glyph}</Button>)}
         </div>}
-        <div className="mt-7 flex items-center justify-between border-y border-border py-4 text-sm"><span>Trazos</span><span className="font-semibold text-primary">{progress} / {strokeCount}</span></div>
-        <div className="flex items-center justify-between border-b border-border py-4 text-sm"><span>Intentos fallidos</span><span className="font-semibold text-primary">{mistakes}</span></div>
-        <Button onClick={restart} variant="porcelain" className="mt-7" disabled={!kanji}><RotateCcw /> Reiniciar</Button>
+        <div className="mt-4 flex items-center justify-between border-y border-border py-3 text-sm"><span>Trazos</span><span className="font-semibold text-primary">{progress} / {strokeCount}</span></div>
+        <div className="flex items-center justify-between border-b border-border py-3 text-sm"><span>Intentos fallidos</span><span className="font-semibold text-primary">{mistakes}</span></div>
+        <Button onClick={restart} variant="porcelain" className="mt-4" disabled={!kanji}><RotateCcw /> Reiniciar</Button>
       </div>
-      <div className="border border-border bg-card p-5 sm:p-8">
+      <div className="practice-plate">
         {kanji ? <>
           <div className="grid gap-7 md:grid-cols-[minmax(160px,230px)_1fr] md:gap-9">
             <div>
@@ -115,7 +115,7 @@ export function StrokeOrderGame() {
           <div role="status" aria-live="polite" className="mt-6 min-h-6 text-sm font-medium text-primary">{feedback}</div>
           {complete && <Button onClick={() => changeKanji((kanjiIndex + 1) % pool.length)} variant="gold" className="mt-3">Siguiente kanji <ArrowRight /></Button>}
         </> : <p className="py-16 text-center text-sm text-muted-foreground">Aún no hay kanji de este nivel en la selección de demostración. Prueba con «Todos».</p>}
-        <p className="mt-7 border-t border-border pt-4 text-[11px] text-muted-foreground">Trazos: <a href="https://kanjivg.tagaini.net/" target="_blank" rel="noreferrer" className="underline underline-offset-2 hover:text-primary">KanjiVG</a> · CC BY-SA 3.0</p>
+        <p className="mt-7 border-t border-border pt-4 text-xs leading-6 text-muted-foreground">Trazos: <a href="https://kanjivg.tagaini.net/" target="_blank" rel="noreferrer" className="underline underline-offset-2 hover:text-primary">KanjiVG</a> · CC BY-SA 3.0</p>
       </div>
     </div>
   </section>;
