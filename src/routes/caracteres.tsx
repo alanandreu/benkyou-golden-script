@@ -60,9 +60,9 @@ function CharacterCatalog({ script }: { script: Script }) {
         </aside>
 
         <div className="min-w-0">
-          <div className="mb-6 grid grid-cols-[minmax(0,1fr)_auto] items-center gap-3">
+          <div className="mb-6 grid items-center gap-3 sm:grid-cols-[minmax(0,1fr)_auto]">
             <div className="min-w-0"><h2 className="font-display text-3xl text-primary">{script}</h2><p className="mt-1 text-xs text-muted-foreground">{count} {script === "Man’yōgana" ? "ejemplos seleccionados" : script === "Hentaigana" ? "variantes históricas" : "formas y combinaciones"}</p></div>
-            <select aria-label="Categoría de caracteres" value={category} onChange={(e) => { const id = e.target.value; setCategory(id); if (id !== "all") setSelected(groups.find((g) => g.id === id)?.characters[0]?.glyph); }} className="control-select w-40 min-w-0 sm:w-52">
+            <select aria-label="Categoría de caracteres" value={category} onChange={(e) => { const id = e.target.value; setCategory(id); if (id !== "all") setSelected(groups.find((g) => g.id === id)?.characters[0]?.glyph); }} className="control-select w-full min-w-0 sm:w-56">
               <option value="all">Todas las categorías</option>
               {groups.map((g) => <option key={g.id} value={g.id}>{g.title}</option>)}
             </select>
