@@ -10,14 +10,21 @@
 
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as AccesoRouteImport } from './routes/acceso'
 import { Route as CaracteresRouteImport } from './routes/caracteres'
 import { Route as GeografiaRouteImport } from './routes/geografia'
 import { Route as GramaticaRouteImport } from './routes/gramatica'
 import { Route as JuegosRouteImport } from './routes/juegos'
+import { Route as UsuarioRouteImport } from './routes/usuario'
 
 const IndexRoute = IndexRouteImport.update({
   id: '/',
   path: '/',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const AccesoRoute = AccesoRouteImport.update({
+  id: '/acceso',
+  path: '/acceso',
   getParentRoute: () => rootRouteImport,
 } as any)
 const CaracteresRoute = CaracteresRouteImport.update({
@@ -40,43 +47,78 @@ const JuegosRoute = JuegosRouteImport.update({
   path: '/juegos',
   getParentRoute: () => rootRouteImport,
 } as any)
+const UsuarioRoute = UsuarioRouteImport.update({
+  id: '/usuario',
+  path: '/usuario',
+  getParentRoute: () => rootRouteImport,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
+  '/acceso': typeof AccesoRoute
   '/caracteres': typeof CaracteresRoute
   '/geografia': typeof GeografiaRoute
   '/gramatica': typeof GramaticaRoute
   '/juegos': typeof JuegosRoute
+  '/usuario': typeof UsuarioRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
+  '/acceso': typeof AccesoRoute
   '/caracteres': typeof CaracteresRoute
   '/geografia': typeof GeografiaRoute
   '/gramatica': typeof GramaticaRoute
   '/juegos': typeof JuegosRoute
+  '/usuario': typeof UsuarioRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
+  '/acceso': typeof AccesoRoute
   '/caracteres': typeof CaracteresRoute
   '/geografia': typeof GeografiaRoute
   '/gramatica': typeof GramaticaRoute
   '/juegos': typeof JuegosRoute
+  '/usuario': typeof UsuarioRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/caracteres' | '/geografia' | '/gramatica' | '/juegos'
+  fullPaths:
+    | '/'
+    | '/acceso'
+    | '/caracteres'
+    | '/geografia'
+    | '/gramatica'
+    | '/juegos'
+    | '/usuario'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/caracteres' | '/geografia' | '/gramatica' | '/juegos'
-  id: '__root__' | '/' | '/caracteres' | '/geografia' | '/gramatica' | '/juegos'
+  to:
+    | '/'
+    | '/acceso'
+    | '/caracteres'
+    | '/geografia'
+    | '/gramatica'
+    | '/juegos'
+    | '/usuario'
+  id:
+    | '__root__'
+    | '/'
+    | '/acceso'
+    | '/caracteres'
+    | '/geografia'
+    | '/gramatica'
+    | '/juegos'
+    | '/usuario'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
+  AccesoRoute: typeof AccesoRoute
   CaracteresRoute: typeof CaracteresRoute
   GeografiaRoute: typeof GeografiaRoute
   GramaticaRoute: typeof GramaticaRoute
   JuegosRoute: typeof JuegosRoute
+  UsuarioRoute: typeof UsuarioRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -86,6 +128,13 @@ declare module '@tanstack/react-router' {
       path: '/'
       fullPath: '/'
       preLoaderRoute: typeof IndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/acceso': {
+      id: '/acceso'
+      path: '/acceso'
+      fullPath: '/acceso'
+      preLoaderRoute: typeof AccesoRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/caracteres': {
@@ -116,15 +165,24 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof JuegosRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/usuario': {
+      id: '/usuario'
+      path: '/usuario'
+      fullPath: '/usuario'
+      preLoaderRoute: typeof UsuarioRouteImport
+      parentRoute: typeof rootRouteImport
+    }
   }
 }
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
+  AccesoRoute: AccesoRoute,
   CaracteresRoute: CaracteresRoute,
   GeografiaRoute: GeografiaRoute,
   GramaticaRoute: GramaticaRoute,
   JuegosRoute: JuegosRoute,
+  UsuarioRoute: UsuarioRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
