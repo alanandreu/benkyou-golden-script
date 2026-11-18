@@ -1,5 +1,5 @@
 import { Link } from "@tanstack/react-router";
-import { BookOpen, Grid2X2, Map, Menu, Puzzle, Search, X } from "lucide-react";
+import { BookOpen, Grid2X2, Map, Menu, Puzzle, Search, UserRound, X } from "lucide-react";
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
 
@@ -20,13 +20,12 @@ export function SiteHeader() {
           <span className="brand-seal" aria-hidden="true">勉</span>
           <span className="flex flex-col leading-none"><span className="font-display text-[22px] font-semibold tracking-[0.15em] text-primary">BENKYOU</span><span className="mt-1.5 text-[9px] uppercase tracking-[0.27em] text-muted-foreground">辞典 · diccionari · diccionario</span></span>
         </Link>
-        <nav className="hidden items-center gap-8 lg:flex" aria-label="Navegación principal">
+        <nav className="hidden items-center gap-5 lg:flex" aria-label="Navegación principal">
           {links.map(({ to, label }) => <Link key={to} to={to} activeProps={{ className: "nav-link nav-link-active" }} className="nav-link">{label}</Link>)}
         </nav>
-        <div className="hidden items-center gap-2 text-[11px] text-muted-foreground md:flex"><span className="font-japanese text-base text-primary">日本語</span><span className="text-gold">✦</span><span>CA / ES</span></div>
-        <Button size="icon" variant="ghost" className="lg:hidden" aria-label={open ? "Cerrar menú" : "Abrir menú"} aria-expanded={open} onClick={() => setOpen(!open)}>{open ? <X /> : <Menu />}</Button>
+        <div className="flex shrink-0 items-center gap-1"><Button asChild variant="porcelain" className="px-3"><Link to="/acceso" onClick={() => setOpen(false)} aria-label="Acceso de usuarios"><UserRound /><span className="hidden sm:inline">Acceder</span></Link></Button><Button size="icon" variant="ghost" className="lg:hidden" aria-label={open ? "Cerrar menú" : "Abrir menú"} aria-expanded={open} onClick={() => setOpen(!open)}>{open ? <X /> : <Menu />}</Button></div>
       </div>
-      {open && <nav className="border-t border-border bg-background px-5 py-3 lg:hidden" aria-label="Navegación móvil">{links.map(({ to, label, icon: Icon }) => <Link key={to} to={to} onClick={() => setOpen(false)} activeProps={{ className: "mobile-nav-link mobile-nav-active" }} className="mobile-nav-link"><Icon className="size-4" />{label}</Link>)}</nav>}
+      {open && <nav className="border-t border-border bg-background px-5 py-3 lg:hidden" aria-label="Navegación móvil">{links.map(({ to, label, icon: Icon }) => <Link key={to} to={to} onClick={() => setOpen(false)} activeProps={{ className: "mobile-nav-link mobile-nav-active" }} className="mobile-nav-link"><Icon className="size-4" />{label}</Link>)}<Link to="/acceso" onClick={() => setOpen(false)} className="mobile-nav-link border-t border-border"><UserRound className="size-4" />Acceso de usuarios</Link></nav>}
     </header>
   );
 }

@@ -15,3 +15,4 @@
 - Keep script catalogs in browser-safe data modules, using URL search parameters for script selection; this makes each writing view linkable without duplicating the shared character page.
 - Use Unicode names for the hentaigana inventory and a licensed supplementary font for rare kana; this prevents invented readings and missing glyphs.
 - Use shared PageHeading, choice buttons and semantic study-surface tokens across learning pages to keep hierarchy and selection states consistent without duplicating layouts.
+- Keep account design previews public and explicitly labeled with temporary example data until real authentication is connected; never treat a preview form as a successful sign-in.
