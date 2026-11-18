@@ -1,5 +1,5 @@
 import { Link } from "@tanstack/react-router";
-import { BookOpen, Grid2X2, Map, Menu, Puzzle, Search, UserRound, X } from "lucide-react";
+import { BookOpen, Grid2X2, Map, Menu, Puzzle, Search, ShoppingBag, UserRound, X } from "lucide-react";
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
 
@@ -9,6 +9,7 @@ const links = [
   { to: "/caracteres" as const, label: "Kanji · Kana", icon: Grid2X2 },
   { to: "/juegos" as const, label: "Minijuegos", icon: Puzzle },
   { to: "/geografia" as const, label: "Geografía", icon: Map },
+  { to: "/tienda" as const, label: "Tienda", icon: ShoppingBag },
 ];
 
 export function SiteHeader() {
@@ -25,7 +26,7 @@ export function SiteHeader() {
         </nav>
         <div className="flex shrink-0 items-center gap-1"><Button asChild variant="porcelain" className="px-3"><Link to="/acceso" onClick={() => setOpen(false)} aria-label="Acceso de usuarios"><UserRound /><span className="hidden sm:inline">Acceder</span></Link></Button><Button size="icon" variant="ghost" className="lg:hidden" aria-label={open ? "Cerrar menú" : "Abrir menú"} aria-expanded={open} onClick={() => setOpen(!open)}>{open ? <X /> : <Menu />}</Button></div>
       </div>
-      {open && <nav className="border-t border-border bg-background px-5 py-3 lg:hidden" aria-label="Navegación móvil">{links.map(({ to, label, icon: Icon }) => <Link key={to} to={to} onClick={() => setOpen(false)} activeProps={{ className: "mobile-nav-link mobile-nav-active" }} className="mobile-nav-link"><Icon className="size-4" />{label}</Link>)}<Link to="/acceso" onClick={() => setOpen(false)} className="mobile-nav-link border-t border-border"><UserRound className="size-4" />Acceso de usuarios</Link></nav>}
+      {open && <nav className="border-t border-border bg-background px-5 py-3 lg:hidden" aria-label="Navegación móvil"><div className="grid grid-flow-col grid-cols-2 grid-rows-3 gap-x-4">{links.map(({ to, label, icon: Icon }) => <Link key={to} to={to} onClick={() => setOpen(false)} activeProps={{ className: "mobile-nav-link mobile-nav-active" }} className="mobile-nav-link"><Icon className="size-4 shrink-0" />{label}</Link>)}</div><Link to="/acceso" onClick={() => setOpen(false)} className="mobile-nav-link border-t border-border"><UserRound className="size-4" />Acceso de usuarios</Link></nav>}
     </header>
   );
 }

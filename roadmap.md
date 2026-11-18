@@ -11,3 +11,4 @@
 - [x] Diseñar acceso en navegación y página de login.
 - [x] Diseñar espacio de usuario con búsquedas, listas, favoritos y configuración de perfil.
 - [x] Verificar las nuevas páginas en ordenador y móvil; conexión de cuentas reales fuera de este diseño.
+- [x] Dividir el menú móvil en dos columnas de tres apartados y añadir Tienda con página de próxima apertura.
