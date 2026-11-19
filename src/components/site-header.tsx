@@ -7,6 +7,7 @@ import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuLabel,
 const languages = [
   { code: "es", label: "Castellano", short: "ES" },
   { code: "ca", label: "Català", short: "CA" },
+  { code: "en", label: "English", short: "EN" },
   { code: "ja", label: "日本語", short: "日" },
 ] as const;
 
@@ -20,8 +21,8 @@ function LanguageMenu() {
           <Languages /><span className="text-xs font-semibold tracking-wider">{current.short}</span>
         </Button>
       </DropdownMenuTrigger>
-      <DropdownMenuContent align="end" className="w-48">
-        <DropdownMenuLabel className="text-xs text-muted-foreground">Idioma · Idioma · 言語</DropdownMenuLabel>
+      <DropdownMenuContent align="end" className="w-52">
+        <DropdownMenuLabel className="text-xs text-muted-foreground">Idioma · Idioma · Language · 言語</DropdownMenuLabel>
         <DropdownMenuSeparator />
         {languages.map((l) => (
           <DropdownMenuItem key={l.code} onSelect={() => { setLang(l.code); document.documentElement.lang = l.code; }} className="justify-between">
