@@ -14,6 +14,7 @@ import appCss from "../styles.css?url";
 import { reportLovableError } from "../lib/lovable-error-reporting";
 import { SiteFooter, SiteHeader } from "@/components/site-header";
 import { Button } from "@/components/ui/button";
+import { I18nProvider } from "@/lib/i18n";
 
 function NotFoundComponent() {
   return (
@@ -107,9 +108,11 @@ function RootComponent() {
 
   return (
     <QueryClientProvider client={queryClient}>
-      <SiteHeader />
-      <Outlet />
-      <SiteFooter />
+      <I18nProvider>
+        <SiteHeader />
+        <Outlet />
+        <SiteFooter />
+      </I18nProvider>
     </QueryClientProvider>
   );
 }
