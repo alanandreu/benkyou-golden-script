@@ -4,6 +4,7 @@ import { useMemo, useState } from "react";
 import { prefectures, regions, type Prefecture, type RegionId } from "@/lib/japan-geo";
 import { regionPaths } from "@/lib/japan-regions";
 import { Button } from "@/components/ui/button";
+import { useT } from "@/lib/i18n";
 
 type Mode = "regiones" | "prefecturas";
 
@@ -41,6 +42,7 @@ const prefectureType = (p: Prefecture): PrefType => {
 };
 
 export function JapanMap() {
+  const tr = useT();
   const [mode, setMode] = useState<Mode>("regiones");
   const [selectedRegion, setSelectedRegion] = useState<RegionId | null>(null);
   const [hoveredRegion, setHoveredRegion] = useState<RegionId | null>(null);
@@ -129,8 +131,8 @@ export function JapanMap() {
     <div className="grid gap-5 sm:p-6 lg:grid-cols-[1fr_340px]">
       <div>
         <div className="mb-6 flex flex-wrap items-center gap-x-4 gap-y-3 border-b border-border pb-5">
-          <span className="eyebrow shrink-0">01 / Modo de visualización</span>
-          <div className="inline-flex flex-wrap gap-2" role="tablist" aria-label="Modo del mapa">
+          <span className="eyebrow shrink-0">{tr("01 / Modo de visualización")}</span>
+          <div className="inline-flex flex-wrap gap-2" role="tablist" aria-label={tr("Modo del mapa")}>
             {(["regiones", "prefecturas"] as const).map((m) => (
               <Button
                 key={m}
@@ -140,22 +142,22 @@ export function JapanMap() {
                 onClick={() => { setMode(m); setSelectedRegion(null); setHoveredRegion(null); setSelectedPrefecture(null); setHoveredPrefecture(null); setTerritory(null); }}
                 className="px-4"
               >
-                {m === "regiones" ? "Regiones" : "Prefecturas"}
+                {tr(m === "regiones" ? "Regiones" : "Prefecturas")}
               </Button>
             ))}
           </div>
         </div>
         <div className="map-plate relative overflow-hidden p-4 md:p-6">
-          <svg viewBox="-20 0 890 1080" className="mx-auto w-full" role="img" aria-label={mode === "regiones" ? "Mapa de las ocho regiones de Japón" : "Mapa de las 47 prefecturas de Japón"}>
+          <svg viewBox="-20 0 890 1080" className="mx-auto w-full" role="img" aria-label={tr(mode === "regiones" ? "Mapa de las ocho regiones de Japón" : "Mapa de las 47 prefecturas de Japón")}>
             <defs>
               <clipPath id="jp-main-clip"><path clipRule="evenodd" d={`M-400,-100 H1300 V1400 H-400 Z ${INSET_SOURCE}`} /></clipPath>
               <clipPath id="jp-inset-clip"><path d={INSET_SOURCE} /></clipPath>
             </defs>
             <g clipPath="url(#jp-main-clip)">{renderLayer(false)}</g>
-            <g aria-label="Islas alejadas: Okinawa, islas Ryūkyū y Senkaku, ampliadas para mayor visibilidad">
+            <g aria-label={tr("Islas alejadas: Okinawa, islas Ryūkyū y Senkaku, ampliadas para mayor visibilidad")}>
               <path d="M400,1020 V750 Q400,724 426,724 H844" fill="none" stroke="var(--gold)" strokeOpacity={0.6} strokeWidth={1} strokeDasharray="7 6" strokeLinecap="round" />
               <text x={428} y={757} fill="var(--primary)" fontSize={16} className="font-japanese">沖縄・琉球諸島</text>
-              <text x={428} y={779} fill="var(--muted-foreground)" fontSize={16}>Islas alejadas · ampliadas</text>
+              <text x={428} y={779} fill="var(--muted-foreground)" fontSize={16}>{tr("Islas alejadas · ampliadas")}</text>
               <g transform={`translate(428 748) scale(${INSET_SCALE}) translate(268 -936)`}>
                 <g clipPath="url(#jp-inset-clip)">{renderLayer(true)}</g>
               </g>
@@ -168,26 +170,26 @@ export function JapanMap() {
         <div className="panel-plate-accent bg-background p-5 sm:p-6">
           {territory ? (
             <div className="animate-rise">
-              <p className="eyebrow">Territorio en disputa</p>
+              <p className="eyebrow">{tr("Territorio en disputa")}</p>
               <p className="mt-3 font-japanese text-4xl text-primary">{territory.ja}</p>
-              <p className="mt-1 font-display text-2xl font-semibold text-foreground">{territory.es}</p>
-              <p className="mt-2 text-sm text-muted-foreground">Catalán: {territory.ca}</p>
-              <p className="mt-4 border-t border-border pt-4 text-sm leading-relaxed text-muted-foreground">{territory.note}</p>
+              <p className="mt-1 font-display text-2xl font-semibold text-foreground">{tr(territory.es)}</p>
+              <p className="mt-2 text-sm text-muted-foreground">{tr("Catalán")}: {territory.ca}</p>
+              <p className="mt-4 border-t border-border pt-4 text-sm leading-relaxed text-muted-foreground">{tr(territory.note)}</p>
             </div>
           ) : mode === "regiones" && activeRegion ? (
             <div className="animate-rise">
-              <p className="eyebrow">Región seleccionada</p>
+              <p className="eyebrow">{tr("Región seleccionada")}</p>
               <p className="mt-3 font-japanese text-4xl text-primary">{activeRegion.ja}</p>
               <p className="mt-1 font-display text-2xl font-semibold text-foreground">{activeRegion.es}</p>
-              <p className="mt-2 text-sm text-muted-foreground">Catalán: {activeRegion.ca}</p>
+              <p className="mt-2 text-sm text-muted-foreground">{tr("Catalán")}: {activeRegion.ca}</p>
             </div>
           ) : mode === "prefecturas" && activePrefecture ? (
             <div className="animate-rise">
-              <p className="eyebrow">Prefectura seleccionada</p>
+              <p className="eyebrow">{tr("Prefectura seleccionada")}</p>
               <p className="mt-3 font-japanese text-4xl text-primary">{activePrefecture.ja}</p>
               <p className="mt-1 font-display text-2xl font-semibold text-foreground">{activePrefecture.es}</p>
               <div className="mt-4 border-t border-border pt-4">
-                <p className="text-xs uppercase tracking-normal text-muted-foreground">Región</p>
+                <p className="text-xs uppercase tracking-normal text-muted-foreground">{tr("Región")}</p>
                 <p className="mt-1 flex items-baseline gap-2 text-sm">
                   <span className="font-japanese text-lg text-gold">{regionById.get(activePrefecture.region)?.ja}</span>
                   <span className="font-medium text-foreground">{regionById.get(activePrefecture.region)?.es}</span>
@@ -196,16 +198,16 @@ export function JapanMap() {
             </div>
           ) : (
             <div>
-              <p className="eyebrow">Explora el mapa</p>
+              <p className="eyebrow">{tr("Explora el mapa")}</p>
               <p className="mt-3 text-sm leading-relaxed text-muted-foreground">
-                {mode === "regiones" ? "Pasa el cursor o toca una región para conocer su nombre en japonés, español y catalán." : "Pasa el cursor o toca una prefectura para conocer su nombre en japonés y la región a la que pertenece."}
+                {tr(mode === "regiones" ? "Pasa el cursor o toca una región para conocer su nombre en japonés, español y catalán." : "Pasa el cursor o toca una prefectura para conocer su nombre en japonés y la región a la que pertenece.")}
               </p>
             </div>
           )}
         </div>
 
         {mode === "regiones" && <div className="panel-hero p-5 sm:p-6">
-          <p className="text-xs font-bold uppercase tracking-normal text-gold-light">Las ocho regiones</p>
+          <p className="text-xs font-bold uppercase tracking-normal text-gold-light">{tr("Las ocho regiones")}</p>
           <ul className="mt-4">
             {regions.map((r) => (
               <li key={r.id} className="panel-hero-rule flex items-center gap-3 border-b py-2.5 text-sm last:border-b-0 last:pb-0 first:pt-0">
@@ -219,19 +221,19 @@ export function JapanMap() {
         </div>}
 
         <div className="border-t border-border bg-secondary/40 p-5 sm:p-6">
-          <p className="eyebrow">Territorios en disputa</p>
+          <p className="eyebrow">{tr("Territorios en disputa")}</p>
           <ul className="mt-5 space-y-3.5">
             {TERRITORIES.map((t) => (
               <li key={t.id}>
                 <Button variant="ghost" onClick={() => setTerritory(t)} aria-pressed={territory?.id === t.id} className="h-auto w-full justify-start gap-3 whitespace-normal px-0 py-1 text-left text-sm hover:text-primary">
                   <span className="size-2.5 shrink-0 rounded-full border border-dashed border-gold bg-gold/25" aria-hidden="true" />
                   <span className="font-japanese text-base text-primary">{t.ja}</span>
-                  <span className="text-foreground">{t.es}</span>
+                  <span className="text-foreground">{tr(t.es)}</span>
                 </Button>
               </li>
             ))}
           </ul>
-          <p className="mt-5 border-l-2 border-border pl-4 text-xs italic leading-relaxed text-muted-foreground">Se señalan con círculo dorado discontinuo. Su soberanía es objeto de disputa internacional.</p>
+          <p className="mt-5 border-l-2 border-border pl-4 text-xs italic leading-relaxed text-muted-foreground">{tr("Se señalan con círculo dorado discontinuo. Su soberanía es objeto de disputa internacional.")}</p>
         </div>
       </aside>
     </div>
@@ -243,10 +245,9 @@ export function JapanMap() {
 
           <div className="relative">
             <p className="eyebrow">都道府県 · Todōfuken</p>
-            <h2 className="mt-3 font-display text-4xl text-primary">Tipos de prefecturas</h2>
+            <h2 className="mt-3 font-display text-4xl text-primary">{tr("Tipos de prefecturas")}</h2>
             <p className="mt-4 max-w-2xl text-sm leading-relaxed text-muted-foreground md:text-base">
-              El sistema administrativo japonés (都道府県 / todōfuken) divide el territorio en cuatro categorías,
-              cada una con su propio sufijo en el nombre:
+{tr("El sistema administrativo japonés (都道府県 / todōfuken) divide el territorio en cuatro categorías, cada una con su propio sufijo en el nombre:")}
             </p>
           </div>
 
@@ -266,16 +267,16 @@ export function JapanMap() {
                     <span className="font-japanese text-4xl text-primary">{info.ja}</span>
                     <span className="font-display text-lg font-semibold text-foreground">{info.es}</span>
                   </div>
-                  <p className="mt-3 text-sm font-medium text-foreground">{c.count}</p>
-                  <p className="mt-1 text-sm text-muted-foreground">{c.body}</p>
+                  <p className="mt-3 text-sm font-medium text-foreground">{tr(c.count)}</p>
+                  <p className="mt-1 text-sm text-muted-foreground">{tr(c.body)}</p>
                 </div>
               );
             })}
           </div>
 
-          <h3 className="mt-14 text-center font-display text-2xl font-semibold text-foreground md:text-3xl">Las 47 prefecturas</h3>
+          <h3 className="mt-14 text-center font-display text-2xl font-semibold text-foreground md:text-3xl">{tr("Las 47 prefecturas")}</h3>
           <p className="mx-auto mt-3 max-w-2xl text-center text-sm leading-relaxed text-muted-foreground">
-            Toca o pulsa una prefectura para verla resaltada en el mapa. El sufijo indica su categoría.
+{tr("Toca o pulsa una prefectura para verla resaltada en el mapa. El sufijo indica su categoría.")}
           </p>
           <div className="relative mt-8 grid grid-cols-2 gap-3 sm:grid-cols-3 lg:grid-cols-4 xl:grid-cols-6">
             {prefectures.map((p, i) => {

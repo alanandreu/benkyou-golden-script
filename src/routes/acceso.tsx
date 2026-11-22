@@ -4,6 +4,7 @@ import { useState, type FormEvent } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import manuscript from "@/assets/benkyou-manuscript.jpg";
+import { useT } from "@/lib/i18n";
 
 export const Route = createFileRoute("/acceso")({
   head: () => ({ meta: [
@@ -16,6 +17,7 @@ export const Route = createFileRoute("/acceso")({
 });
 
 function AccessPage() {
+  const t = useT();
   const [mode, setMode] = useState<"login" | "signup" | "reset">("login");
   const [visible, setVisible] = useState(false);
   const [message, setMessage] = useState("");
@@ -27,29 +29,29 @@ function AccessPage() {
   return <main className="pb-16">
     <section className="relative isolate overflow-hidden bg-primary px-5 pb-12 pt-12 text-center text-primary-foreground md:pt-16">
       <img src={manuscript} alt="" className="absolute inset-0 -z-10 h-full w-full object-cover opacity-15" />
-      <p className="text-xs font-semibold text-gold-light">BENKYOU / MI ESPACIO</p>
-      <h1 className="mt-4 font-display text-5xl md:text-6xl">Cada palabra, un paso más.</h1>
+      <p className="text-xs font-semibold text-gold-light">{t("BENKYOU / MI ESPACIO")}</p>
+      <h1 className="mt-4 font-display text-5xl md:text-6xl">{t("Cada palabra, un paso más.")}</h1>
       <p className="mt-4 font-japanese text-xl text-gold-light" lang="ja">学びの続きを、ここから。</p>
     </section>
     <div className="mx-auto mt-9 max-w-md px-5">
       <div className="flex items-center justify-between gap-4 border-b border-border pb-5">
-        <h2 className="font-display text-3xl text-primary">{mode === "reset" ? "Recuperar contraseña" : mode === "signup" ? "Crear una cuenta" : "Bienvenido de nuevo"}</h2>
+        <h2 className="font-display text-3xl text-primary">{t(mode === "reset" ? "Recuperar contraseña" : mode === "signup" ? "Crear una cuenta" : "Bienvenido de nuevo")}</h2>
         <LockKeyhole className="size-5 shrink-0 text-gold-ink" />
       </div>
-      {mode !== "reset" && <div className="mt-6 grid grid-cols-2 gap-2" aria-label="Tipo de acceso">
-        <Button variant="choice" aria-pressed={mode === "login"} onClick={() => changeMode("login")}>Iniciar sesión</Button>
-        <Button variant="choice" aria-pressed={mode === "signup"} onClick={() => changeMode("signup")}>Crear cuenta</Button>
+      {mode !== "reset" && <div className="mt-6 grid grid-cols-2 gap-2" aria-label={t("Tipo de acceso")}>
+        <Button variant="choice" aria-pressed={mode === "login"} onClick={() => changeMode("login")}>{t("Iniciar sesión")}</Button>
+        <Button variant="choice" aria-pressed={mode === "signup"} onClick={() => changeMode("signup")}>{t("Crear cuenta")}</Button>
       </div>}
       <form onSubmit={submit} className="mt-7 space-y-5">
-        {mode === "signup" && <div><label htmlFor="display-name" className="mb-2 block text-sm font-semibold">Nombre</label><Input id="display-name" autoComplete="nickname" placeholder="Tu nombre" required className="h-12 bg-card" /></div>}
-        <div><label htmlFor="email" className="mb-2 block text-sm font-semibold">Correo electrónico</label><div className="relative"><Mail className="absolute left-3 top-4 size-4 text-muted-foreground" /><Input id="email" type="email" autoComplete="email" placeholder="tu@correo.com" required className="h-12 bg-card pl-10" /></div></div>
-        {mode !== "reset" && <div><label htmlFor="password" className="mb-2 block text-sm font-semibold">Contraseña</label><div className="relative"><Input id="password" type={visible ? "text" : "password"} autoComplete={mode === "signup" ? "new-password" : "current-password"} required className="h-12 bg-card pr-12" /><Button type="button" variant="ghost" size="icon" className="absolute right-1.5 top-1.5" aria-label={visible ? "Ocultar contraseña" : "Mostrar contraseña"} title={visible ? "Ocultar contraseña" : "Mostrar contraseña"} onClick={() => setVisible(!visible)}>{visible ? <EyeOff /> : <Eye />}</Button></div></div>}
-        {mode === "login" && <div className="text-right"><Button type="button" variant="link" className="h-auto px-0 py-0 text-xs" onClick={() => changeMode("reset")}>¿Has olvidado la contraseña?</Button></div>}
-        <Button type="submit" className="h-12 w-full">{mode === "reset" ? "Enviar enlace" : mode === "signup" ? "Crear cuenta" : "Entrar en mi espacio"}<ArrowRight /></Button>
-        {message && <p role="status" className="border-l-2 border-gold bg-gold-pale p-4 text-sm leading-6">{message}</p>}
+        {mode === "signup" && <div><label htmlFor="display-name" className="mb-2 block text-sm font-semibold">{t("Nombre")}</label><Input id="display-name" autoComplete="nickname" placeholder={t("Tu nombre")} required className="h-12 bg-card" /></div>}
+        <div><label htmlFor="email" className="mb-2 block text-sm font-semibold">{t("Correo electrónico")}</label><div className="relative"><Mail className="absolute left-3 top-4 size-4 text-muted-foreground" /><Input id="email" type="email" autoComplete="email" placeholder={t("tu@correo.com")} required className="h-12 bg-card pl-10" /></div></div>
+        {mode !== "reset" && <div><label htmlFor="password" className="mb-2 block text-sm font-semibold">{t("Contraseña")}</label><div className="relative"><Input id="password" type={visible ? "text" : "password"} autoComplete={mode === "signup" ? "new-password" : "current-password"} required className="h-12 bg-card pr-12" /><Button type="button" variant="ghost" size="icon" className="absolute right-1.5 top-1.5" aria-label={t(visible ? "Ocultar contraseña" : "Mostrar contraseña")} title={t(visible ? "Ocultar contraseña" : "Mostrar contraseña")} onClick={() => setVisible(!visible)}>{visible ? <EyeOff /> : <Eye />}</Button></div></div>}
+        {mode === "login" && <div className="text-right"><Button type="button" variant="link" className="h-auto px-0 py-0 text-xs" onClick={() => changeMode("reset")}>{t("¿Has olvidado la contraseña?")}</Button></div>}
+        <Button type="submit" className="h-12 w-full">{t(mode === "reset" ? "Enviar enlace" : mode === "signup" ? "Crear cuenta" : "Entrar en mi espacio")}<ArrowRight /></Button>
+        {message && <p role="status" className="border-l-2 border-gold bg-gold-pale p-4 text-sm leading-6">{t(message)}</p>}
       </form>
-      {mode === "reset" && <Button variant="link" className="mt-3 px-0" onClick={() => changeMode("login")}>Volver al inicio de sesión</Button>}
-      <div className="mt-8 border-t border-border pt-6 text-center"><p className="text-xs text-muted-foreground">Vista previa · cuentas aún no conectadas</p><Button asChild variant="porcelain" className="mt-4 w-full"><Link to="/usuario">Explorar el espacio de ejemplo <ArrowRight /></Link></Button></div>
+      {mode === "reset" && <Button variant="link" className="mt-3 px-0" onClick={() => changeMode("login")}>{t("Volver al inicio de sesión")}</Button>}
+      <div className="mt-8 border-t border-border pt-6 text-center"><p className="text-xs text-muted-foreground">{t("Vista previa · cuentas aún no conectadas")}</p><Button asChild variant="porcelain" className="mt-4 w-full"><Link to="/usuario">{t("Explorar el espacio de ejemplo")} <ArrowRight /></Link></Button></div>
     </div>
   </main>;
 }

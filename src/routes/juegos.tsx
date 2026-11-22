@@ -6,6 +6,7 @@ import { PageHeading } from "@/components/page-heading";
 import { StrokeOrderGame } from "@/components/stroke-order-game";
 import { FillSentenceGame } from "@/components/fill-sentence-game";
 import { jlptLevels, type JlptLevel } from "@/lib/kanji-strokes";
+import { useT } from "@/lib/i18n";
 
 export const Route = createFileRoute("/juegos")({ head: () => ({ meta: [
   { title: "Minijuegos de japonés — BENKYOU" }, { name: "description", content: "Practica japonés con juegos de memoria y orden de trazos de kanji." },
@@ -52,6 +53,7 @@ function pickPairs(level: LevelFilter): Pair[] {
 }
 
 function GamesPage() {
+  const t = useT();
   const [level, setLevel] = useState<LevelFilter>("N5");
   const [pairs, setPairs] = useState<Pair[]>(() => allPairs.slice(0, 4));
   const [deck, setDeck] = useState<Card[]>(() => buildDeck(allPairs.slice(0, 4)));
@@ -87,30 +89,30 @@ function GamesPage() {
 
   return <main className="min-h-[75vh] bg-background">
     <div className="mx-auto max-w-7xl px-5 py-8 md:px-10 md:py-14">
-      <PageHeading area="Práctica" title="Minijuegos" japanese="ミニゲーム">Aprender también es jugar. Practica vocabulario y escritura japonesa por nivel JLPT, o mezcla todo con «Todos».</PageHeading>
+      <PageHeading area="Práctica" title="Minijuegos" japanese="ミニゲーム">{t("Aprender también es jugar. Practica vocabulario y escritura japonesa por nivel JLPT, o mezcla todo con «Todos».")}</PageHeading>
       <div className="grid items-start gap-6 lg:grid-cols-[280px_1fr]">
         <aside className="border-t-2 border-gold pt-4">
-          <p className="eyebrow">01 / Memoria</p>
-          <h2 className="mt-3 font-display text-4xl text-primary">Encuentra la pareja</h2>
-          <p className="mt-3 text-sm leading-7 text-muted-foreground">Destapa dos cartas y relaciona cada palabra japonesa con su significado.</p>
-          <div className="mt-4 flex flex-wrap gap-2" aria-label="Nivel JLPT">
-            {levelOptions.map((option) => <Button key={option} size="sm" variant="choice" aria-pressed={option === level} onClick={() => startRound(option)}>{option}</Button>)}
+          <p className="eyebrow">{t("01 / Memoria")}</p>
+          <h2 className="mt-3 font-display text-4xl text-primary">{t("Encuentra la pareja")}</h2>
+          <p className="mt-3 text-sm leading-7 text-muted-foreground">{t("Destapa dos cartas y relaciona cada palabra japonesa con su significado.")}</p>
+          <div className="mt-4 flex flex-wrap gap-2" aria-label={t("Nivel JLPT")}>
+            {levelOptions.map((option) => <Button key={option} size="sm" variant="choice" aria-pressed={option === level} onClick={() => startRound(option)}>{t(option)}</Button>)}
           </div>
-          <div className="mt-4 flex items-center justify-between border-y border-border py-3 text-sm"><span>Movimientos</span><span className="font-semibold text-primary">{moves}</span></div>
-          <div className="flex items-center justify-between border-b border-border py-3 text-sm"><span>Parejas</span><span className="font-semibold text-primary">{matched.length} / {pairs.length}</span></div>
-          <Button onClick={restart} variant="porcelain" className="mt-4"><RotateCcw /> Reiniciar</Button>
+          <div className="mt-4 flex items-center justify-between border-y border-border py-3 text-sm"><span>{t("Movimientos")}</span><span className="font-semibold text-primary">{moves}</span></div>
+          <div className="flex items-center justify-between border-b border-border py-3 text-sm"><span>{t("Parejas")}</span><span className="font-semibold text-primary">{matched.length} / {pairs.length}</span></div>
+          <Button onClick={restart} variant="porcelain" className="mt-4"><RotateCcw /> {t("Reiniciar")}</Button>
         </aside>
         <div className="practice-plate">
           <div className="grid grid-cols-4 gap-2 sm:gap-4">
             {deck.map((card) => {
               const revealed = flipped.includes(card.key) || matched.includes(card.pair);
-              return <Button key={card.key} onClick={() => flip(card.key, card.pair)} aria-label={revealed ? card.label : "Carta boca abajo"} aria-pressed={revealed} variant="ghost" className={`aspect-[4/5] h-auto w-full rounded-sm border p-1 text-center transition-all duration-200 ${revealed ? "border-gold bg-gold-pale text-primary" : "border-primary bg-primary text-gold-light hover:bg-primary/90 hover:text-gold-light"}`}>
-                <span className={revealed ? "font-japanese text-sm sm:text-xl whitespace-normal break-words" : "font-display text-3xl sm:text-5xl"}>{revealed ? card.label : "✦"}</span>
+              return <Button key={card.key} onClick={() => flip(card.key, card.pair)} aria-label={revealed ? t(card.label) : t("Carta boca abajo")} aria-pressed={revealed} variant="ghost" className={`aspect-[4/5] h-auto w-full rounded-sm border p-1 text-center transition-all duration-200 ${revealed ? "border-gold bg-gold-pale text-primary" : "border-primary bg-primary text-gold-light hover:bg-primary/90 hover:text-gold-light"}`}>
+                <span className={revealed ? "font-japanese text-sm sm:text-xl whitespace-normal break-words" : "font-display text-3xl sm:text-5xl"}>{revealed ? (card.label.match(/[\u3040-\u9fff]/) ? card.label : t(card.label)) : "✦"}</span>
               </Button>;
             })}
           </div>
-          {matched.length === pairs.length && <div role="status" className="mt-6 border-t border-border pt-5 font-display text-2xl text-primary">¡Todas las parejas encontradas! <span className="text-sm text-muted-foreground">{moves} movimientos</span></div>}
-          <p className="mt-7 border-t border-border pt-4 text-xs leading-6 text-muted-foreground">Selección de demostración: 4 parejas por nivel. Con «Todos» se mezclan palabras de cualquier nivel.</p>
+          {matched.length === pairs.length && <div role="status" className="mt-6 border-t border-border pt-5 font-display text-2xl text-primary">{t("¡Todas las parejas encontradas!")} <span className="text-sm text-muted-foreground">{t("{n} movimientos", { n: moves })}</span></div>}
+          <p className="mt-7 border-t border-border pt-4 text-xs leading-6 text-muted-foreground">{t("Selección de demostración: 4 parejas por nivel. Con «Todos» se mezclan palabras de cualquier nivel.")}</p>
         </div>
       </div>
       <StrokeOrderGame />

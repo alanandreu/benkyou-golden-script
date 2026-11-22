@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { ArrowRight, RotateCcw } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import { useT } from "@/lib/i18n";
 
 type Level = "N5" | "N4" | "N3" | "N2" | "N1";
 type Question = { before: string; after: string; answer: string; options: string[]; es: string };
@@ -39,6 +40,7 @@ const levelOptions: LevelFilter[] = ["Todos", ...levels];
 const allQuestions = levels.flatMap((l) => questions[l]);
 
 export function FillSentenceGame() {
+  const t = useT();
   const [level, setLevel] = useState<LevelFilter>("N5");
   const [index, setIndex] = useState(0);
   const [picked, setPicked] = useState<string | null>(null);
@@ -59,31 +61,31 @@ export function FillSentenceGame() {
   return <section className="study-section" aria-labelledby="fill-game-title">
     <div className="grid items-start gap-6 lg:grid-cols-[280px_1fr]">
       <div>
-        <p className="eyebrow">03 / Lectura</p>
-        <h2 id="fill-game-title" className="mt-3 font-display text-4xl text-primary">Completa la frase</h2>
-        <p className="mt-3 text-sm leading-7 text-muted-foreground">Elige la palabra que falta. Atención a los homófonos y kanji parecidos.</p>
-        <div className="mt-4 flex flex-wrap gap-2" aria-label="Nivel JLPT">
-          {levelOptions.map((l) => <Button key={l} size="sm" variant="choice" aria-pressed={l === level} onClick={() => reset(l)}>{l}</Button>)}
+        <p className="eyebrow">{t("03 / Lectura")}</p>
+        <h2 id="fill-game-title" className="mt-3 font-display text-4xl text-primary">{t("Completa la frase")}</h2>
+        <p className="mt-3 text-sm leading-7 text-muted-foreground">{t("Elige la palabra que falta. Atención a los homófonos y kanji parecidos.")}</p>
+        <div className="mt-4 flex flex-wrap gap-2" aria-label={t("Nivel JLPT")}>
+          {levelOptions.map((l) => <Button key={l} size="sm" variant="choice" aria-pressed={l === level} onClick={() => reset(l)}>{t(l)}</Button>)}
         </div>
-        <div className="mt-4 flex items-center justify-between border-y border-border py-3 text-sm"><span>Frase</span><span className="font-semibold text-primary">{index + 1} / {list.length}</span></div>
-        <div className="flex items-center justify-between border-b border-border py-3 text-sm"><span>Aciertos</span><span className="font-semibold text-primary">{score}</span></div>
-        <Button onClick={() => reset()} variant="porcelain" className="mt-4"><RotateCcw /> Reiniciar</Button>
+        <div className="mt-4 flex items-center justify-between border-y border-border py-3 text-sm"><span>{t("Frase")}</span><span className="font-semibold text-primary">{index + 1} / {list.length}</span></div>
+        <div className="flex items-center justify-between border-b border-border py-3 text-sm"><span>{t("Aciertos")}</span><span className="font-semibold text-primary">{score}</span></div>
+        <Button onClick={() => reset()} variant="porcelain" className="mt-4"><RotateCcw /> {t("Reiniciar")}</Button>
       </div>
       <div className="practice-plate">
-        <p className="eyebrow">{level === "Todos" ? "Todos los niveles" : `Nivel ${level}`}</p>
+        <p className="eyebrow">{level === "Todos" ? t("Todos los niveles") : t("Nivel {l}", { l: level })}</p>
         <p className="mt-5 font-japanese text-2xl leading-relaxed text-foreground sm:text-3xl">
           {q.before}<span className={`mx-1 inline-block min-w-20 border-b-2 px-2 text-center ${done ? (picked === q.answer ? "border-gold text-primary" : "border-destructive text-primary") : "border-gold text-transparent"}`}>{done ? q.answer : "＿"}</span>{q.after}
         </p>
-        {done && <p className="mt-3 text-sm text-muted-foreground">{q.es}</p>}
+        {done && <p className="mt-3 text-sm text-muted-foreground">{t(q.es)}</p>}
         <div className="mt-7 grid grid-cols-2 gap-3">
           {q.options.map((o) => {
             const state = !done ? "border-border bg-background hover:border-gold hover:bg-secondary" : o === q.answer ? "border-gold bg-gold-pale" : o === picked ? "border-destructive bg-destructive/10" : "border-border opacity-60";
             return <Button key={o} variant="ghost" onClick={() => choose(o)} className={`h-auto rounded-sm border py-4 font-japanese text-xl text-primary ${state}`}>{o}</Button>;
           })}
         </div>
-        <div role="status" aria-live="polite" className="mt-6 min-h-6 text-sm font-medium text-primary">{done && (picked === q.answer ? "¡Correcto!" : `No es correcto. La respuesta era ${q.answer}.`)}</div>
-        {done && <Button onClick={next} variant="gold" className="mt-3">Siguiente frase <ArrowRight /></Button>}
-        <p className="mt-7 border-t border-border pt-4 text-xs leading-6 text-muted-foreground">Selección de demostración: 3 frases por nivel.</p>
+        <div role="status" aria-live="polite" className="mt-6 min-h-6 text-sm font-medium text-primary">{done && (picked === q.answer ? t("¡Correcto!") : t("No es correcto. La respuesta era {a}.", { a: q.answer }))}</div>
+        {done && <Button onClick={next} variant="gold" className="mt-3">{t("Siguiente frase")} <ArrowRight /></Button>}
+        <p className="mt-7 border-t border-border pt-4 text-xs leading-6 text-muted-foreground">{t("Selección de demostración: 3 frases por nivel.")}</p>
       </div>
     </div>
   </section>;
