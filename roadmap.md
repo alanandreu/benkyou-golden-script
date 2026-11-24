@@ -12,3 +12,4 @@
 - [x] Diseñar espacio de usuario con búsquedas, listas, favoritos y configuración de perfil.
 - [x] Verificar las nuevas páginas en ordenador y móvil; conexión de cuentas reales fuera de este diseño.
 - [x] Dividir el menú móvil en dos columnas de tres apartados y añadir Tienda con página de próxima apertura.
+- [ ] Completar las traducciones de toda la interfaz en castellano, catalán, inglés y japonés y verificar el selector en todas las páginas.

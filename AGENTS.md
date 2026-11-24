@@ -17,3 +17,4 @@
 - Use shared PageHeading, choice buttons and semantic study-surface tokens across learning pages to keep hierarchy and selection states consistent without duplicating layouts.
 - Keep account design previews public and explicitly labeled with temporary example data until real authentication is connected; never treat a preview form as a successful sign-in.
 - Keep the store on its own route with a coming-soon state until a catalog is requested; navigation must never imply purchases are available.
+- Keep interface translations in browser-safe catalogs keyed by Spanish source text, using the shared language provider; preserve explicitly labeled dictionary translations and Japanese study examples as learning content.
